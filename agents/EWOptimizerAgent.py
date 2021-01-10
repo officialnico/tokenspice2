@@ -12,7 +12,7 @@ from web3engine import bfactory, bpool, datatoken, dtfactory, globaltokens
 from web3tools.web3util import toBase18
         
 @enforce_types
-class EWPublisherAgent(BaseAgent):
+class EWOptimizerAgent(BaseAgent):    
     def __init__(self, name: str, USD: float, OCEAN: float):
         super().__init__(name, USD, OCEAN)
         
@@ -48,7 +48,7 @@ class EWPublisherAgent(BaseAgent):
         pool_i = len(state.agents.filterToPool())
         dt_name = f'DT{pool_i}'
         # >>> DEC change
-        pool_agent_name = f'EnergyWeb pool{pool_i}'
+        pool_agent_name = f'EnergyWeb Forecast pool{pool_i}'
         
         #new DT
         DT = self._createDatatoken(dt_name, mint_amt=1000.0) #magic number
