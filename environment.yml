@@ -3,10 +3,12 @@ dependencies:
   - python==3.8
   - pip
   - numpy
+  - pandas
   - matplotlib
   - pip:
     - cadcad
     - hvplot
+    - plotly
     - enforce-typing
     - pytest
     - web3
