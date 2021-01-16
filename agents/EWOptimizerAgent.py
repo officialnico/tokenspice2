@@ -58,7 +58,7 @@ class EWOptimizerAgent(BaseAgent):
         pool = bpool.BPool(pool_address)
 
         #bind tokens & add initial liquidity
-        OCEAN_bind_amt = self.OCEAN() #magic number: use all the OCEAN
+        OCEAN_bind_amt = 0.5*self.OCEAN() #magic number: use all the OCEAN
         DT_bind_amt = 20.0 #magic number
                 
         DT.approve(pool.address, toBase18(DT_bind_amt), from_wallet=wallet)

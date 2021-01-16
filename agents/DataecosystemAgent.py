@@ -26,8 +26,8 @@ class DataecosystemAgent(BaseAgent):
         if self._doCreateStakerspeculatorAgent(state):
             self._createStakerspeculatorAgent(state)
             
-        if self._doCreateDataconsumerAgent(state):
-            self._createDataconsumerAgent(state)
+        # if self._doCreateDataconsumerAgent(state):
+        #     self._createDataconsumerAgent(state)
 
         if self._doCreateEWPublisherAgent(state):
             self._createEWPublisherAgent(state)
@@ -45,7 +45,7 @@ class DataecosystemAgent(BaseAgent):
         USD = 0.0 #FIXME magic number
         OCEAN = 1000.0 #FIXME magic number
         new_agent = PublisherAgent(name=name, USD=USD, OCEAN=OCEAN)
-        state.agents[name] = new_agent
+        state.addAgent(new_agent)
 
     def _doCreateStakerspeculatorAgent(self, state) -> bool:
         #magic number: rule - only create if no agents so far
@@ -56,7 +56,7 @@ class DataecosystemAgent(BaseAgent):
         USD = 0.0 #FIXME magic number
         OCEAN = 1000.0 #FIXME magic number
         new_agent = StakerspeculatorAgent(name=name, USD=USD, OCEAN=OCEAN)
-        state.agents[name] = new_agent
+        state.addAgent(new_agent)
 
     def _doCreateDataconsumerAgent(self, state) -> bool:
         #magic number: rule - only create if no agents so far
@@ -67,7 +67,7 @@ class DataecosystemAgent(BaseAgent):
         USD = 0.0 #FIXME magic number
         OCEAN = 1000.0 #FIXME magic number
         new_agent = DataconsumerAgent(name=name, USD=USD, OCEAN=OCEAN)
-        state.agents[name] = new_agent
+        state.addAgent(new_agent)
 
     def _doCreateEWPublisherAgent(self, state) -> bool:
         #magic number: rule - only create if no agents so far
@@ -76,9 +76,9 @@ class DataecosystemAgent(BaseAgent):
     def _createEWPublisherAgent(self, state) -> EWPublisherAgent:
         name = "Energy Web Publisher " + names.get_first_name()
         USD = 0.0 #FIXME magic number
-        OCEAN = 1000.0 #FIXME magic number
+        OCEAN = 2000.0 #FIXME magic number
         new_agent = EWPublisherAgent(name=name, USD=USD, OCEAN=OCEAN)
-        state.agents[name] = new_agent
+        state.addAgent(new_agent)
 
     def _doCreateEWOptimizerAgent(self, state) -> bool:
         #magic number: rule - only create if no agents so far
@@ -87,6 +87,6 @@ class DataecosystemAgent(BaseAgent):
     def _createEWOptimizerAgent(self, state) -> EWPublisherAgent:
         name = "Energy Web Optimizer " + names.get_first_name()
         USD = 0.0 #FIXME magic number
-        OCEAN = 1000.0 #FIXME magic number
+        OCEAN = 2000.0 #FIXME magic number
         new_agent = EWOptimizerAgent(name=name, USD=USD, OCEAN=OCEAN)
-        state.agents[name] = new_agent
+        state.addAgent(new_agent)

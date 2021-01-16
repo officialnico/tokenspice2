@@ -148,8 +148,13 @@ class SimState(object):
         """This happens once per tick"""
         #update agents
 
-        for agent in self.agents.values():
-            agent.takeStep(self)
+        # real_agents = self.agents.copy()
+        # number = len(real_agents)
+        for key, agent in list(self.agents.items()):
+            # if "Energy Web Publisher" in agent.name:
+                # print(agent) 
+                agent.takeStep(self)
+
 
         #update global state values: revenue, valuation
         self.kpis.takeStep(self)
@@ -169,7 +174,7 @@ class SimState(object):
 
     def addAgent(self, agent):
         assert agent.name not in self.agents, "have an agent with this name" 
-        self.agents[agent.name] = self.agents
+        self.agents[agent.name] = agent
 
     def publisherAgents(self):
         return {name:agent for name,agent in self.agents.items() 

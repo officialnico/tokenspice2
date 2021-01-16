@@ -5,6 +5,8 @@ dependencies:
   - numpy
   - matplotlib
   - pip:
+    - cadcad
+    - hvplot
     - enforce-typing
     - pytest
     - web3

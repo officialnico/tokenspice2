@@ -15,7 +15,7 @@ class AgentDict(dict):
         Extend the dict object to get the best of both worlds (object/dict)
         """
         super(AgentDict, self).__init__(*arg, **kw)
-    
+
     def filterByNonzeroStake(self, agent):
         """Which pools has 'agent' staked on?"""
         return AgentDict({pool_agent.name : pool_agent
