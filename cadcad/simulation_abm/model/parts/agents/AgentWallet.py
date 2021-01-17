@@ -4,11 +4,11 @@ log = logging.getLogger('wallet')
 from enforce_typing import enforce_types # type: ignore[import]
 import typing
 
-from web3engine import bpool, datatoken, globaltokens
-from util import constants 
-from util.strutil import asCurrency
-from web3tools import web3util, web3wallet
-from web3tools.web3util import fromBase18, toBase18
+from ..web3engine import bpool, datatoken, globaltokens
+from ..util import constants 
+from ..util.strutil import asCurrency
+from ..web3tools import web3util, web3wallet
+from ..web3tools.web3util import fromBase18, toBase18
 
 @enforce_types
 class AgentWallet:

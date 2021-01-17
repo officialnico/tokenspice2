@@ -2,10 +2,9 @@
 Model logic structure.
 """
 
-
-# from .parts.environment.food_regeneration import *
-from .parts.agents.consuming import *
-
+from .parts.polimechs.consuming import *
+from .parts.polimechs.publishing import *
+from .parts.polimechs.optimizing import *
 
 partial_state_update_block = [
     {
@@ -13,16 +12,23 @@ partial_state_update_block = [
             'consume_datasets': p_consume_datasets,
         },
         'variables': {
-            'agents': s_agent_location,
-
+            'agents': s_consume_datasets,
         }
     },
     {
         'policies': {
-            'vote_agent': p_voting,
+            'publish_datasets': p_publish_datasets,
         },
         'variables': {
-            'agents': s_voting,
+            'agents': s_publish_datasets,
+        }
+    },
+    {
+        'policies': {
+            'optimize': p_optimizing,
+        },
+        'variables': {
+            'agents': s_optimizing,
         }
     },
 ]

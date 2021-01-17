@@ -1,9 +1,9 @@
 from enforce_typing import enforce_types # type: ignore[import]
 import web3
 
-from util import constants
-from web3tools import web3util, web3wallet
-from web3engine import datatoken, dtfactory
+from ..util import constants
+from ..web3tools import web3util, web3wallet
+from . import datatoken, dtfactory
 
 _MINTERS = {} # symbol : _Minter
 

@@ -5,8 +5,8 @@ import json
 import os
 import typing
 from web3 import Web3
-from util import constants
-from web3tools.account import privateKeyToAddress
+from ..util import constants
+from .account import privateKeyToAddress
 
 def get_infura_url(infura_id):
     network = get_network()

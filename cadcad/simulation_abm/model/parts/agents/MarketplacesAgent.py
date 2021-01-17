@@ -4,8 +4,8 @@ log = logging.getLogger('agents')
 from enforce_typing import enforce_types # type: ignore[import]
 import math
 
-from agents.BaseAgent import BaseAgent
-from util.constants import S_PER_YEAR
+from .BaseAgent import BaseAgent
+from ..util.constants import S_PER_YEAR
     
 
 @enforce_types
@@ -31,7 +31,7 @@ class MarketplacesAgent(BaseAgent):
     def revenuePerMarketplacePerSecond(self) -> float:
         return self._revenue_per_marketplace_per_s
         
-    def takeStep(self, state):
+    def takeStep(self, a):
         ratio = state.kpis.mktsRNDToSalesRatio()
         mkts_growth_rate_per_year = state.ss.annualMktsGrowthRate(ratio)
         mkts_growth_rate_per_tick = self._growthRatePerTick(mkts_growth_rate_per_year)

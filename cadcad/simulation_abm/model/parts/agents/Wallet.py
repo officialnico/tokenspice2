@@ -1,13 +1,13 @@
 import logging
 log = logging.getLogger('wallet')
 
-import enforce
+from enforce_typing import enforce_types # type: ignore[import]
 import typing
 
-from util.constants import SAFETY
-from util.strutil import asCurrency
+from ..util.constants import SAFETY
+from ..util.strutil import asCurrency
 
-@enforce.runtime_validation
+@enforce_types
 class Wallet:
     """Wallets hold balances of USD, etc for Agents"""
 

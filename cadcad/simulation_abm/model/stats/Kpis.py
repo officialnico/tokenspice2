@@ -4,8 +4,8 @@ log = logging.getLogger('kpis')
 from enforce_typing import enforce_types # type: ignore[import]
 from typing import List
 
-from util import valuation
-from util.constants import * 
+from ..parts.util import valuation
+from ..parts.util.constants import * 
 
 @enforce_types
 class KPIs:

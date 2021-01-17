@@ -1,5 +1,5 @@
 from enforce_typing import enforce_types # type: ignore[import]
-from web3tools import web3util, web3wallet
+from ..web3tools import web3util, web3wallet
 
 @enforce_types
 class BToken:

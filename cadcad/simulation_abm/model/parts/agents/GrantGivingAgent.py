@@ -3,7 +3,7 @@ log = logging.getLogger('agents')
 
 from enforce_typing import enforce_types # type: ignore[import]
 
-from agents.BaseAgent import BaseAgent
+from .BaseAgent import BaseAgent
                         
 @enforce_types
 class GrantGivingAgent(BaseAgent):

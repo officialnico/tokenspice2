@@ -8,8 +8,8 @@ import random
 import re
 import typing
 
-from util.constants import INF
-from util.strutil import StrMixin
+from .constants import INF
+from .strutil import StrMixin
 
 def isNumber(x) -> bool:
     return isinstance(x, int) or isinstance(x, float)

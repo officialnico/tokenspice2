@@ -16,9 +16,9 @@ print("Execution in {:.1f}s".format(end_time - start_time))
 
 # Get the ABM results
 agent_ds = experiments.dataset[0].agents
-site_ds = experiments.dataset[0].sites
 timesteps = experiments.dataset[0].timestep
-
+for k,v in agent_ds.items():
+    print(v)
 
 # N = 300
 

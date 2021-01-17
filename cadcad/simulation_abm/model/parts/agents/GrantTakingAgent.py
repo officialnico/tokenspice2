@@ -4,7 +4,7 @@ log = logging.getLogger('agents')
 from enforce_typing import enforce_types # type: ignore[import]
 import math
 
-from agents.BaseAgent import BaseAgent
+from .BaseAgent import BaseAgent
         
 @enforce_types
 class GrantTakingAgent(BaseAgent):    

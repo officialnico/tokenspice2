@@ -2,4 +2,4 @@
 Simulation parameters.
 """
 
-SIMULATION_TIME_STEPS = 300
+SIMULATION_TIME_STEPS = 20

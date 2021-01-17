@@ -4,9 +4,9 @@ log = logging.getLogger('marketagents')
 from enforce_typing import enforce_types # type: ignore[import]
 import random
 
-from agents.BaseAgent import BaseAgent
-from web3engine import bpool, datatoken, globaltokens
-from web3tools.web3util import toBase18
+from .BaseAgent import BaseAgent
+from ..web3engine import bpool, datatoken, globaltokens
+from ..web3tools.web3util import toBase18
             
 @enforce_types
 class PoolAgent(BaseAgent):    

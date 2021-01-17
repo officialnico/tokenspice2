@@ -1,11 +1,11 @@
 from enforce_typing import enforce_types # type: ignore[import]
 
-from agents.PublisherAgent import PublisherAgent
-from agents.PoolAgent import PoolAgent
-from agents.StakerspeculatorAgent import StakerspeculatorAgent
-from agents.DataconsumerAgent import DataconsumerAgent
-from agents.EWOptimizerAgent import EWOptimizerAgent
-
+from .PublisherAgent import PublisherAgent
+from .PoolAgent import PoolAgent
+from .StakerspeculatorAgent import StakerspeculatorAgent
+from .DataconsumerAgent import DataconsumerAgent
+from .EWPublisherAgent import EWPublisherAgent
+from .EWOptimizerAgent import EWOptimizerAgent
 
 @enforce_types
 class AgentDict(dict):
@@ -25,15 +25,14 @@ class AgentDict(dict):
     def filterToPool(self):
         return self.filterByClass(PoolAgent)
 
+    def filterToEWDevicePool(self):
+        return self.filterByEWDeviceClass(PoolAgent)
+
     def filterToPublisher(self):
         return self.filterByClass(PublisherAgent)
 
     def filterToStakerspeculator(self):
         return self.filterByClass(StakerspeculatorAgent)
-
-    # DEC update Optimizer
-    def filterToOptimizer(self):
-        return self.filterByClass(EWOptimizerAgent)
 
     def filterToDataconsumer(self):
         return self.filterByClass(DataconsumerAgent)
@@ -42,4 +41,17 @@ class AgentDict(dict):
         return AgentDict({agent.name : agent
                           for agent in self.values()
                           if isinstance(agent, _class)})
+
+    # DEC update Energyy Web
+
+    def filterToEWPublisher(self):
+        return self.filterByClass(EWPublisherAgent)
+
+    def filterToEWOptimizer(self):
+        return self.filterByClass(EWOptimizerAgent)
+
+    def filterByEWDevicePool(self, _class):
+        return AgentDict({agent.name : agent
+                          for agent in self.values()
+                          if isinstance(agent, _class) and 'Energy Web Device Pool' in agent.name})
     

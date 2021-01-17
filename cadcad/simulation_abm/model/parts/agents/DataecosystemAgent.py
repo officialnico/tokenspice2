@@ -5,14 +5,14 @@ from enforce_typing import enforce_types # type: ignore[import]
 import random
 import names
 
-from agents.BaseAgent import BaseAgent
-from agents.PublisherAgent import PublisherAgent
-from agents.EWPublisherAgent import EWPublisherAgent
-from agents.EWOptimizerAgent import EWOptimizerAgent
+from .BaseAgent import BaseAgent
+from .PublisherAgent import PublisherAgent
+from .EWPublisherAgent import EWPublisherAgent
+from .EWOptimizerAgent import EWOptimizerAgent
 
-from agents.StakerspeculatorAgent import StakerspeculatorAgent
-from agents.DataconsumerAgent import DataconsumerAgent
-from web3tools.web3util import toBase18
+from .StakerspeculatorAgent import StakerspeculatorAgent
+from .DataconsumerAgent import DataconsumerAgent
+from ..web3tools.web3util import toBase18
                     
 @enforce_types
 class DataecosystemAgent(BaseAgent):

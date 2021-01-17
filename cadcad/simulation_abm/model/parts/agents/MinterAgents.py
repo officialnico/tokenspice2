@@ -4,8 +4,8 @@ log = logging.getLogger('minteragents')
 from enforce_typing import enforce_types # type: ignore[import]
 import math
 
-from parts.agents.BaseAgent import BaseAgent    
-from util.constants import S_PER_YEAR, BITCOIN_NUM_HALF_LIVES
+from .BaseAgent import BaseAgent    
+from ..util.constants import S_PER_YEAR, BITCOIN_NUM_HALF_LIVES
 
 #====================================================================
 # Linear minting

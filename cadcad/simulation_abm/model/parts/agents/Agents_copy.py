@@ -4,7 +4,7 @@ log = logging.getLogger('agents')
 import enforce
 import math
 
-from BaseAgent import BaseAgent   
+from .BaseAgent import BaseAgent   
 from ..util.constants import S_PER_MONTH, S_PER_YEAR
 
 @enforce.runtime_validation

@@ -4,7 +4,7 @@ log = logging.getLogger('valuation')
 from enforce_typing import enforce_types # type: ignore[import]
 import typing
 
-from util.strutil import asCurrency 
+from .strutil import asCurrency 
 
 def firmValuationPS(annual_revenue: float, p_s_ratio: float) -> float:
     """

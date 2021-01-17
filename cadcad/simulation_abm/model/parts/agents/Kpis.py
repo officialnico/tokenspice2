@@ -1,12 +1,12 @@
 import logging
 log = logging.getLogger('kpis')
 
-import enforce
+from enforce_typing import enforce_types # type: ignore[import]
 
-from util import valuation
-from util.constants import * 
+from ..util import valuation
+from ..util.constants import * 
 
-@enforce.runtime_validation
+@enforce_types
 class KPIs:
     def __init__(self, time_step: int):
         self._time_step = time_step #seconds per tick

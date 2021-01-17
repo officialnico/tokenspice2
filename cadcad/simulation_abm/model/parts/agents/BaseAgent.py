@@ -7,6 +7,7 @@ import typing
 
 from ..util.constants import SAFETY
 from ..util.strutil import StrMixin
+from .Wallet import Wallet
 
 @enforce_types
 class BaseAgent(ABC, StrMixin):
@@ -14,7 +15,7 @@ class BaseAgent(ABC, StrMixin):
        
     def __init__(self, name: str, USD: float, OCEAN: float):
         self.name = name
-        self._wallet = Wallet.Wallet(USD=USD, OCEAN=OCEAN)
+        self._wallet = Wallet(USD=USD, OCEAN=OCEAN)
 
     #=======================================================================
     @abstractmethod
