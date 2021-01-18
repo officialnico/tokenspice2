@@ -5,14 +5,18 @@ Model logic structure.
 from .parts.polimechs.consuming import *
 from .parts.polimechs.publishing import *
 from .parts.polimechs.optimizing import *
+from .parts.polimechs.accounting import *
+
 
 partial_state_update_block = [
     {
         'policies': {
             'consume_datasets': p_consume_datasets,
+            'accounting': p_accounting,
         },
         'variables': {
             'agents': s_consume_datasets,
+            'global_state': s_accounting
         }
     },
     {
@@ -31,4 +35,6 @@ partial_state_update_block = [
             'agents': s_optimizing,
         }
     },
+
+
 ]

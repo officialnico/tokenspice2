@@ -28,9 +28,8 @@ from .parts.agents.RouterAgent import RouterAgent
 from .parts.agents.EWPublisherAgent import EWPublisherAgent
 from .parts.agents.EWOptimizerAgent import EWOptimizerAgent
 
-
-from .stats.Kpis import KPIs
 from .SimStrategy import SimStrategy
+from .SimState import SimState
 from .parts.util import mathutil, valuation
 from .parts.util.mathutil import Range
 from .parts.util.constants import *
@@ -61,27 +60,7 @@ agent_probabilities = [0.7,0.75,0.8,0.85,0.9,0.95]
 
 ss = SimStrategy()
 
-#main
-tick = 0
-
-#used to manage names
-_next_free_marketplace_number = 0
-
-#used to add agents
-_marketplace_tick_previous_add = 0
-
-#as ecosystem improves, these parameters may change / improve
-_marketplace_percent_toll_to_ocean = 0.002 #magic number
-
-initial_kpis = {
-    'percent_burn': 0.05, 
-    'total_OCEAN_minted': 0.0,
-    'total_OCEAN_burned': 0.0,   
-    'total_OCEAN_burned_USD': 0.0,  
-    'speculation_valuation': 5e6,  
-    'percent_increase_speculation_valuation_per_s': 0.10 / S_PER_YEAR,  
-    }
-
+simState = SimState(ss)
 
 # init agents
 initial_agents = AgentDict()
@@ -90,13 +69,13 @@ initial_agents = AgentDict()
 new_agents: Set[BaseAgent] = set()
 
 #FIXME: replace MarketplacesAgent with DataecosystemAgent, when ready
-# new_agents.add(MarketplacesAgent(
-#     name = "marketplaces1", USD=0.0, OCEAN=0.0,
-#     toll_agent_name = "opc_address",
-#     n_marketplaces = float(ss.init_n_marketplaces),
-#     revenue_per_marketplace_per_s = 2e3 / S_PER_MONTH, #magic number
-#     time_step = 0,
-#     ))
+new_agents.add(MarketplacesAgent(
+    name = "marketplaces1", USD=0.0, OCEAN=0.0,
+    toll_agent_name = "opc_address",
+    n_marketplaces = float(ss.init_n_marketplaces),
+    revenue_per_marketplace_per_s = 2e3 / S_PER_MONTH, #magic number
+    time_step = 0,
+    ))
 
 new_agents.add(DataconsumerAgent(
     name = "Dataconsumer", USD=0.0, OCEAN=0.0
@@ -174,11 +153,9 @@ new_agents.add(EWOptimizerAgent(
 
 for agent in new_agents:
     initial_agents[agent.name] = agent
+    # print(type(agent))
 
 genesis_states = {
     'agents': initial_agents,
-    'stats': initial_kpis,
-    '_next_free_marketplace_number': 0,
-    '_marketplace_tick_previous_add': 0,
-    '_marketplace_percent_toll_to_ocean': 0.002
+    'global_state': simState,
 }

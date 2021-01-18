@@ -302,6 +302,29 @@ Here's progress on that front. (Last updated 2020-12-10).
 
 And many future things beyond:)
 
+# cadCAD simulation
+
+Work done by [Shawn](https://github.com/longtailfinancial/tokenspice2/tree/energyweb) and [Marc](https://github.com/marc4gov/tokenspice2/tree/energyweb) to port TokenSPICE to cadCAD in order to make use of a standardized simulation framework.
+
+# Backlog
+
+cadCAD has a functional approach and needs `dict` in order to process Partial State Update blocks, so we need to wrap the `state` and `agent` objects into `dict`s. Good thing is we can merge the agents in cadCADs fine-grained component based policies and mechanics, in the folder `polimechs`
+
+Here's progress on that front. (Last updated 2021-01-18).
+
+**Done so far:**
+- Updated `environment.yml` to include `cadcad`, `plotly` and `hvplot`
+- Copied most of the TokenSPICE code to a `cadcad` folder
+- Re-used `SimStrategy`, `SimState` and `KPIs` to populate cadCADs `state_variables.py`
+- Merge TokenSPICE code to cadCAD code
+  - Used a standard cadCAD structure (`simulation_abm` folder, `config.py` and `sim_params.py`)
+  - Re-arranged folder structure to accomodate for relative imports
+
+**Still to do:**
+- Finish writing Python-level agent behaviors in cadCADs policies style
+- Wire new agents into system-level design 
+
+
 
 # A Final Word, or Two
 

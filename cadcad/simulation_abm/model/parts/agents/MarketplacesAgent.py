@@ -31,8 +31,8 @@ class MarketplacesAgent(BaseAgent):
     def revenuePerMarketplacePerSecond(self) -> float:
         return self._revenue_per_marketplace_per_s
         
-    def takeStep(self, a):
-        ratio = state.kpis.mktsRNDToSalesRatio()
+    def takeStep(self, kpis):
+        ratio = kpis.mktsRNDToSalesRatio()
         mkts_growth_rate_per_year = state.ss.annualMktsGrowthRate(ratio)
         mkts_growth_rate_per_tick = self._growthRatePerTick(mkts_growth_rate_per_year)
         
