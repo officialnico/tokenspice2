@@ -3,6 +3,7 @@ CONF_FILE_PATH = './tokenspice.ini'
 import configparser, os
 config = configparser.ConfigParser()
 config.read(os.path.expanduser(CONF_FILE_PATH))
+print(config)
 
 SAFETY = config['general'].getboolean('safety')
 assert SAFETY is not None

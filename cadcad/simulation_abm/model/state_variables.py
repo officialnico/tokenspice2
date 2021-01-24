@@ -29,7 +29,7 @@ from .parts.agents.EWPublisherAgent import EWPublisherAgent
 from .parts.agents.EWOptimizerAgent import EWOptimizerAgent
 
 from .SimStrategy import SimStrategy
-from .SimState import SimState
+from .SimState import SimState, funcOne
 from .parts.util import mathutil, valuation
 from .parts.util.mathutil import Range
 from .parts.util.constants import *
@@ -54,12 +54,16 @@ PROPOSAL_COUNT = 10
 MAX_ATTRACTION_CAPACITY = 5
 MAX_TIMESTEPS = 200
 MAX_DURATION = 5
+MAX_DAYS = 365
 
 ## yet to be implemented
 agent_probabilities = [0.7,0.75,0.8,0.85,0.9,0.95]
 
 ss = SimStrategy()
-
+ss.setMaxTicks(MAX_DAYS * S_PER_DAY / ss.time_step + 1)
+    
+assert hasattr(ss, 'save_interval')
+ss.save_interval = S_PER_DAY
 simState = SimState(ss)
 
 # init agents
@@ -93,63 +97,63 @@ new_agents.add(EWOptimizerAgent(
 #     name = "dataecosystem1", USD=0.0, OCEAN=0.0
 # ))
 
-# new_agents.add(RouterAgent(
-#     name = "opc_address", USD=0.0, OCEAN=0.0,
-#     receiving_agents = {"ocean_dao" : initial_kpis['_percentToOceanDao'],
-#                         "opc_burner" : initial_kpis['percentToBurn}']}))
+new_agents.add(RouterAgent(
+    name = "opc_address", USD=0.0, OCEAN=0.0,
+    receiving_agents = {"ocean_dao" : simState.percentToOceanDao,
+                        "opc_burner" : simState.percentToBurn}))
 
-# new_agents.add(OCEANBurnerAgent(
-#     name = "opc_burner", USD=0.0, OCEAN=0.0))
+new_agents.add(OCEANBurnerAgent(
+    name = "opc_burner", USD=0.0, OCEAN=0.0))
 
 # #func = MinterAgents.ExpFunc(H=4.0)
-# func = MinterAgents.RampedExpFunc(H=4.0,                                 #magic number
-#                                     T0=0.5, T1=1.0, T2=1.4, T3=3.0,        #""
-#                                     M1=0.10, M2=0.25, M3=0.50)             #""
-# new_agents.add(MinterAgents.OCEANFuncMinterAgent(
-#     name = "ocean_51",
-#     receiving_agent_name = "ocean_dao",
-#     total_OCEAN_to_mint = UNMINTED_OCEAN_SUPPLY,
-#     s_between_mints = S_PER_DAY,
-#     func = func))
+func = MinterAgents.RampedExpFunc(H=4.0,                                 #magic number
+                                    T0=0.5, T1=1.0, T2=1.4, T3=3.0,        #""
+                                    M1=0.10, M2=0.25, M3=0.50)             #""
+new_agents.add(MinterAgents.OCEANFuncMinterAgent(
+    name = "ocean_51",
+    receiving_agent_name = "ocean_dao",
+    total_OCEAN_to_mint = UNMINTED_OCEAN_SUPPLY,
+    s_between_mints = S_PER_DAY,
+    func = func))
 
-# new_agents.add(GrantGivingAgent(
-#     name = "opf_treasury_for_ocean_dao",
-#     USD = 0.0, OCEAN = OPF_TREASURY_OCEAN_FOR_OCEAN_DAO,                 #magic number
-#     receiving_agent_name = "ocean_dao",
-#     s_between_grants = S_PER_MONTH, n_actions = 12 * 3))                 #""
+new_agents.add(GrantGivingAgent(
+    name = "opf_treasury_for_ocean_dao",
+    USD = 0.0, OCEAN = OPF_TREASURY_OCEAN_FOR_OCEAN_DAO,                 #magic number
+    receiving_agent_name = "ocean_dao",
+    s_between_grants = S_PER_MONTH, n_actions = 12 * 3))                 #""
 
-# new_agents.add(GrantGivingAgent(
-#     name = "opf_treasury_for_opf_mgmt",
-#     USD = OPF_TREASURY_USD, OCEAN = OPF_TREASURY_OCEAN_FOR_OPF_MGMT,     #magic number
-#     receiving_agent_name = "opf_mgmt",
-#     s_between_grants = S_PER_MONTH, n_actions = 12 * 3))                 #""
+new_agents.add(GrantGivingAgent(
+    name = "opf_treasury_for_opf_mgmt",
+    USD = OPF_TREASURY_USD, OCEAN = OPF_TREASURY_OCEAN_FOR_OPF_MGMT,     #magic number
+    receiving_agent_name = "opf_mgmt",
+    s_between_grants = S_PER_MONTH, n_actions = 12 * 3))                 #""
 
-# new_agents.add(GrantGivingAgent(
-#     name = "bdb_treasury",
-#     USD = BDB_TREASURY_USD, OCEAN = BDB_TREASURY_OCEAN,                  #magic number
-#     receiving_agent_name = "bdb_mgmt",
-#     s_between_grants = S_PER_MONTH, n_actions = 17))                     #""
+new_agents.add(GrantGivingAgent(
+    name = "bdb_treasury",
+    USD = BDB_TREASURY_USD, OCEAN = BDB_TREASURY_OCEAN,                  #magic number
+    receiving_agent_name = "bdb_mgmt",
+    s_between_grants = S_PER_MONTH, n_actions = 17))                     #""
 
-# new_agents.add(RouterAgent(
-#     name = "ocean_dao",
-#     receiving_agents = {"opc_workers" : funcOne},
-#     USD=0.0, OCEAN=0.0))
+new_agents.add(RouterAgent(
+    name = "ocean_dao",
+    receiving_agents = {"opc_workers" : funcOne},
+    USD=0.0, OCEAN=0.0))
 
-# new_agents.add(RouterAgent(
-#     name = "opf_mgmt",
-#     receiving_agents = {"opc_workers" : funcOne},
-#     USD=0.0, OCEAN=0.0))
+new_agents.add(RouterAgent(
+    name = "opf_mgmt",
+    receiving_agents = {"opc_workers" : funcOne},
+    USD=0.0, OCEAN=0.0))
                 
-# new_agents.add(RouterAgent(
-#     name = "bdb_mgmt",
-#     receiving_agents = {"bdb_workers" : funcOne},
-#     USD=0.0, OCEAN=0.0))
+new_agents.add(RouterAgent(
+    name = "bdb_mgmt",
+    receiving_agents = {"bdb_workers" : funcOne},
+    USD=0.0, OCEAN=0.0))
 
-# new_agents.add(GrantTakingAgent(
-#     name = "opc_workers", USD=0.0, OCEAN=0.0))
+new_agents.add(GrantTakingAgent(
+    name = "opc_workers", USD=0.0, OCEAN=0.0))
 
-# new_agents.add(GrantTakingAgent(
-#     name = "bdb_workers", USD=0.0, OCEAN=0.0))
+new_agents.add(GrantTakingAgent(
+    name = "bdb_workers", USD=0.0, OCEAN=0.0))
 
 for agent in new_agents:
     initial_agents[agent.name] = agent

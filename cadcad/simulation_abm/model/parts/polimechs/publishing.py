@@ -1,5 +1,4 @@
 import random
-from ..agents.EWPublisherAgent import EWPublisherAgent
 from ..agents.AgentDict import AgentDict
 
 def p_publish_datasets(params, substep, state_history, prev_state):

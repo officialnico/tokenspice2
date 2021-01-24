@@ -5,7 +5,6 @@ from enforce_typing import enforce_types # type: ignore[import]
 import logging
 import os
 import sys
-import time
 
 INFO = logging.INFO
 DEBUG = logging.DEBUG
@@ -61,15 +60,21 @@ Usage: run_1 MAX_DAYS OUTPUT_DIR [DO_PROFILE]
     from util import constants
     print(f'SAFETY = {constants.SAFETY}')
     print('')
-
-    # Experiments
-    import run
-
-    start_time = time()
-    experiments = run.run()
-    end_time = time()
-    print("Execution in {:.1f}s".format(end_time - start_time))
-
-    # Get the ABM results
-    agent_ds = experiments.dataset[0].agents
-    timesteps = experiments.dataset[0].timestep
+    
+    ss = SimStrategy()
+    ss.setMaxTicks(max_days * constants.S_PER_DAY / ss.time_step + 1)
+    
+    assert hasattr(ss, 'save_interval')
+    ss.save_interval = constants.S_PER_DAY
+                
+    #go
+    
+    master = SimEngine(ss, output_dir)
+    if not do_profile:
+        master.run()
+    else:
+        import cProfile
+        stats_filename = os.path.join(output_dir, 'stats')
+        cProfile.run('master.run()', stats_filename)
+        print(f'Output stats file: {stats_filename}. To see: ./showstats.py outdir_csv/stats 20 cumulative')
+    print(f'Output directory: {output_dir}')

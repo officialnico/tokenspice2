@@ -22,7 +22,7 @@ class GrantGivingAgent(BaseAgent):
         
         self._tick_last_disburse = None
         
-    def takeStep(self, state):
+    def takeStep(self, state, agents):
         do_disburse = False
         if self._tick_last_disburse is None:
             do_disburse = True
@@ -33,12 +33,12 @@ class GrantGivingAgent(BaseAgent):
             do_disburse = (n_s_since >= n_s_thr)
         
         if do_disburse:
-            self._disburseFunds(state)
+            self._disburseFunds(state, agents)
             self._tick_last_disburse = state.tick
 
-    def _disburseFunds(self, state):
+    def _disburseFunds(self, state, agents):
         #same amount each time
-        receiving_agent = state.getAgent(self._receiving_agent_name)
+        receiving_agent = state.getAgent(agents, self._receiving_agent_name)
         
         USD = min(self.USD(), self._USD_per_grant)
         self._transferUSD(receiving_agent, USD)

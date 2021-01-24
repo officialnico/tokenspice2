@@ -12,7 +12,7 @@ def p_accounting(params, substep, state_history, prev_state):
     global_state = prev_state['global_state']
 
     global_state.takeStep()
-    # print(f'State tick: {global_state.tick}')
+    # print(f'State: {global_state.OCEANprice()}')
     stats_delta = global_state
 
     return {'stats_delta': stats_delta }

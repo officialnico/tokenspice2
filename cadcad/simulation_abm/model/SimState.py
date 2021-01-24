@@ -54,7 +54,6 @@ class SimState(object):
 
         #update global state values: other
         self._speculation_valuation *= (1.0 + self._percent_increase_speculation_valuation_per_s * self.ss.time_step)
-        print(self._speculation_valuation)
 
      
     def marketplacePercentTollToOcean(self) -> float:
@@ -113,6 +112,8 @@ class SimState(object):
     def totalOCEANburnedUSD(self) -> float:
         return self._total_OCEAN_burned_USD
     
+    def getAgent(self, agents, name):
+        return agents[name]
     
 def funcOne():
     return 1.0

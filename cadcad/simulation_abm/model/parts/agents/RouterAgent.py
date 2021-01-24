@@ -23,26 +23,26 @@ class RouterAgent(BaseAgent):
         self._USD_per_tick: List[float] = [] #the next tick will record what's in self
         self._OCEAN_per_tick: List[float] = [] # ""
         
-    def takeStep(self, state) -> None:
+    def takeStep(self, state, agents) -> None:
         #record what we had up until this point
         self._USD_per_tick.append(self.USD())
         self._OCEAN_per_tick.append(self.OCEAN())
         
         #disburse it all, as soon as agent has it
         if self.USD() > 0:
-            self._disburseUSD(state)
+            self._disburseUSD(state, agents)
         if self.OCEAN() > 0:
-            self._disburseOCEAN(state)
+            self._disburseOCEAN(state, agents)
 
-    def _disburseUSD(self, state) -> None:
+    def _disburseUSD(self, state, agents) -> None:
         USD = self.USD()
         for name, computePercent in self._receiving_agents.items():
-            self._transferUSD(state.getAgent(name), computePercent() * USD)
+            self._transferUSD(state.getAgent(agents, name), computePercent() * USD)
 
-    def _disburseOCEAN(self, state) -> None:
+    def _disburseOCEAN(self, state, agents) -> None:
         OCEAN = self.OCEAN()
         for name, computePercent in self._receiving_agents.items():
-            self._transferOCEAN(state.getAgent(name), computePercent() * OCEAN)
+            self._transferOCEAN(state.getAgent(agents, name), computePercent() * OCEAN)
 
     def monthlyUSDreceived(self, state) -> float:
         """Amount of USD received in the past month. 

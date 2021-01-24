@@ -6,9 +6,19 @@ from .parts.polimechs.consuming import *
 from .parts.polimechs.publishing import *
 from .parts.polimechs.optimizing import *
 from .parts.polimechs.accounting import *
+from .parts.polimechs.logistics import *
+
 
 
 partial_state_update_block = [
+    {
+        'policies': {
+            'logistics': p_logistics,
+        },
+        'variables': {
+            'agents': s_logistics,
+        }
+    },
     {
         'policies': {
             'consume_datasets': p_consume_datasets,

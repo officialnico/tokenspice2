@@ -1,5 +1,6 @@
 import random
 from ..agents.DataconsumerAgent import DataconsumerAgent
+from ..agents.AgentDict import AgentDict
 
 def p_consume_datasets(params, substep, state_history, prev_state):
     """
@@ -9,6 +10,7 @@ def p_consume_datasets(params, substep, state_history, prev_state):
     test = f'p_consume_datasets, {step} - {substep}'
     print(test)
     agents = prev_state['agents']
+    print(type(AgentDict(agents)))
     dataconsumer_agents = {k: v for k, v in agents.items() if 'Dataconsumer' in v.name}
  
     agent_delta = {}
