@@ -8,9 +8,9 @@ def p_consume_datasets(params, substep, state_history, prev_state):
     """
     step = prev_state['timestep']
     test = f'p_consume_datasets, {step} - {substep}'
-    print(test)
+    # print(test)
     agents = prev_state['agents']
-    print(type(AgentDict(agents)))
+
     dataconsumer_agents = {k: v for k, v in agents.items() if 'Dataconsumer' in v.name}
  
     agent_delta = {}

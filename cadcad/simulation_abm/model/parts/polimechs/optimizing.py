@@ -7,7 +7,7 @@ def p_optimizing(params, substep, state_history, prev_state):
     Optimizing the forecasting data token pool.
     """
     step = prev_state['timestep']
-    print(f'p_optimizing, {step} - {substep}')
+    # print(f'p_optimizing, {step} - {substep}')
     agents = prev_state['agents']
     optimizer_agents = {k: v for k, v in agents.items() if 'Energy Web Optimizer' in v.name}
  

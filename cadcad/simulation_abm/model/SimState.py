@@ -46,11 +46,11 @@ class SimState(object):
 
         log.debug("init: end")
             
-    def takeStep(self) -> None:
+    def takeStep(self, agents) -> None:
         """This happens once per tick"""
-
+        self.tick += 1
         #update global state values: revenue, valuation
-        self.kpis.takeStep(self)
+        self.kpis.takeStep(self, agents)
 
         #update global state values: other
         self._speculation_valuation *= (1.0 + self._percent_increase_speculation_valuation_per_s * self.ss.time_step)
@@ -66,11 +66,11 @@ class SimState(object):
         return 1.0 - self._percent_burn
     
     #==============================================================
-    # def grantTakersSpentAtTick(self) -> float:
-    #     return sum(
-    #         agent.spentAtTick()
-    #         for agent in self.agents.values()
-    #         if isinstance(agent, GrantTakingAgent))
+    def grantTakersSpentAtTick(self, agents) -> float:
+        return sum(
+            agent.spentAtTick()
+            for agent in agents.values()
+            if isinstance(agent, GrantTakingAgent))
 
     #==============================================================
     def OCEANprice(self) -> float:
@@ -114,7 +114,13 @@ class SimState(object):
     
     def getAgent(self, agents, name):
         return agents[name]
-    
+
+
+
+
+
+
+
 def funcOne():
     return 1.0
 

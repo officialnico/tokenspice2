@@ -1,24 +1,36 @@
+from ..agents.MarketplacesAgent import MarketplacesAgent
 import random
 
-from ....model.SimState import SimState
+from ..agents.AgentDict import AgentDict
+from ..agents.SimAgent import SimAgent
 
 def p_accounting(params, substep, state_history, prev_state):
     """
-    Update the KPIs.
+    Update the state and KPIs.
     """
     step = prev_state['timestep']
-    print(f'p_accounting, {step} - {substep}')
+    # print(f'p_accounting, {step} - {substep}')
 
-    global_state = prev_state['global_state']
+    state = prev_state['state']
+    agents = prev_state['agents']
 
-    global_state.takeStep()
+    # mutant of SimEngine, logging
+    sim_agents = AgentDict(agents).filterByClass(SimAgent)
+    for label, agent in list(sim_agents.items()):
+        agent.takeStep(state, agents)
+
+    marketplaces_agents = AgentDict(agents).filterByClass(MarketplacesAgent)
+    for label, agent in list(marketplaces_agents.items()):
+        agent.takeStep(state, agents)
+
+    state.takeStep(agents)
     # print(f'State: {global_state.OCEANprice()}')
-    stats_delta = global_state
+    state_delta = state
 
-    return {'stats_delta': stats_delta }
+    return {'state_delta': state_delta }
 
 def s_accounting(params, substep, state_history, prev_state, policy_input):
-    updated_stats = policy_input['stats_delta']
-    return ('global_state', updated_stats)
+    updated_stats = policy_input['state_delta']
+    return ('state', updated_stats)
 
 

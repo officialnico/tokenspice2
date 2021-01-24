@@ -17,4 +17,4 @@ class DataconsumerAgent(BaseAgent):
         
     def takeStep(self):
         #FIXME
-        print("Dataconsumer takes step")
+        pass

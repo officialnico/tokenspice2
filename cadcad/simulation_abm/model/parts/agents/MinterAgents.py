@@ -228,9 +228,9 @@ class OCEANFuncMinterAgent(BaseAgent):
         self._tick_previous_mint = None
         self._OCEAN_left_to_mint: float = total_OCEAN_to_mint
         
-    def takeStep(self, state):        
+    def takeStep(self, state, agents):        
         if self._doMint(state):
-            self._mintAndDisburseFunds(state)
+            self._mintAndDisburseFunds(state, agents)
 
     def OCEANminted(self):
         return self._total_OCEAN_to_mint - self._OCEAN_left_to_mint
@@ -248,7 +248,7 @@ class OCEANFuncMinterAgent(BaseAgent):
             n_s_thr = self._s_between_mints            
             return (n_s_since >= n_s_thr)
 
-    def _mintAndDisburseFunds(self, state):
+    def _mintAndDisburseFunds(self, state, agents):
         assert self._OCEAN_left_to_mint > 0.0, "only call if mints are left"
         
         t = state.tick * state.ss.time_step / S_PER_YEAR
@@ -272,7 +272,7 @@ class OCEANFuncMinterAgent(BaseAgent):
         state._total_OCEAN_minted += OCEAN
         self.receiveOCEAN(OCEAN)
         
-        receiving_agent = state.getAgent(self._receiving_agent_name)
+        receiving_agent = state.getAgent(agents, self._receiving_agent_name)
         self._transferOCEAN(receiving_agent, OCEAN)
         
         self._tick_previous_mint = state.tick

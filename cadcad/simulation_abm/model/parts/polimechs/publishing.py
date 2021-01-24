@@ -7,7 +7,7 @@ def p_publish_datasets(params, substep, state_history, prev_state):
     """
     step = prev_state['timestep']
     test = f'p_publish_datasets, {step} - {substep}'
-    print(test)
+    # print(test)
     agents = prev_state['agents']
     publisher_agents = {k: v for k, v in agents.items() if 'Energy Web Publisher' in v.name}
  

@@ -12,10 +12,10 @@ def p_logistics(params, substep, state_history, prev_state):
     Do the logistics.
     """
     step = prev_state['timestep']
-    print(f'p_logistics, {step}:{substep}')
+    # print(f'p_logistics, {step}:{substep}')
 
     agents = prev_state['agents']
-    state = prev_state['global_state']
+    state = prev_state['state']
     router_agents = AgentDict(agents).filterByClass(RouterAgent)
     ocean_burner_agents = AgentDict(agents).filterByClass(OCEANBurnerAgent)
     minter_agents = AgentDict(agents).filterByClass(MinterAgents.OCEANFuncMinterAgent)
@@ -33,7 +33,7 @@ def p_logistics(params, substep, state_history, prev_state):
         agent_delta[label] = agent
 
     for label, agent in list(minter_agents.items()):
-        agent.takeStep(state)
+        agent.takeStep(state, agents)
         agent_delta[label] = agent
 
     for label, agent in list(grantgiving_agents.items()):

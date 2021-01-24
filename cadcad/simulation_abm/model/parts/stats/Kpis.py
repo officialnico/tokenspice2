@@ -22,17 +22,17 @@ class KPIs:
         self._total_OCEAN_minted_USD__per_tick: List[float] = []
         self._total_OCEAN_burned_USD__per_tick: List[float] = []
 
-    def takeStep(self, state):        
-        # self._granttakers_revenue_per_tick__per_tick.append(
-        #     state.grantTakersSpentAtTick())
+    def takeStep(self, state, agents):        
+        self._granttakers_revenue_per_tick__per_tick.append(
+            state.grantTakersSpentAtTick(agents))
         
-        # am = state.getAgent("marketplaces1")
-        # self._revenue_per_marketplace_per_s__per_tick.append(
-        #     am.revenuePerMarketplacePerSecond())
-        # self._n_marketplaces__per_tick.append(am.numMarketplaces())
-        # self._marketplace_percent_toll_to_ocean__per_tick.append(
-        #     state.marketplacePercentTollToOcean())
-        print("KPIs takeStep..")
+        am = state.getAgent(agents, "marketplaces1")
+        self._revenue_per_marketplace_per_s__per_tick.append(
+            am.revenuePerMarketplacePerSecond())
+        self._n_marketplaces__per_tick.append(am.numMarketplaces())
+        self._marketplace_percent_toll_to_ocean__per_tick.append(
+            state.marketplacePercentTollToOcean())
+        # print("KPIs takeStep..")
         O_minted = state.totalOCEANminted()
         O_burned = state.totalOCEANburned()
         self._total_OCEAN_minted__per_tick.append(O_minted)

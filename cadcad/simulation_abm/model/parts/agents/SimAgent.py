@@ -1,17 +1,16 @@
+
 import logging
 log = logging.getLogger('master')
 
 from enforce_typing import enforce_types # type: ignore[import]
 import os
 
-from .parts.util import valuation
-from .parts.util.constants import S_PER_MIN, S_PER_HOUR, S_PER_DAY, S_PER_MONTH, S_PER_YEAR
-from .parts.util.strutil import prettyBigNum
-from .SimState import SimState
-from .SimStrategy import SimStrategy
+from ..util import valuation
+from ..util.constants import S_PER_MIN, S_PER_HOUR, S_PER_DAY, S_PER_MONTH, S_PER_YEAR
+from ..util.strutil import prettyBigNum
 
 @enforce_types
-class SimEngine(object):
+class SimAgent(object):
     """
     @description
       Runs a simulation.
@@ -23,54 +22,28 @@ class SimEngine(object):
        from a pre-loaded state (e.g. with SimState.loadSimState).
     """
 
-    def __init__(self, ss: SimStrategy, output_dir: str, state = None):
-        self.state = state
-        if self.state is None:
-            self.state = SimState.SimState(ss)
+    def __init__(self, name: str, output_dir: str):
+        self.name = name
         self.output_dir = output_dir
         self.output_csv = "data.csv" #magic number
 
-        assert len(self.state.agents) > 0
-        
-    def run(self):
-        """
-        @description
-          Runs the simulation!  This is the main work routine.
-        
-        @return
-           <<none>> but it continually generates an output csv output_dir
-        """
-        log.info("Begin.")
-        log.info(str(self.state.ss) + "\n")
-
-        while True:
-            self.takeStep()
-            if self.doStop():
-                break
-            self.state.tick += 1 #could be e.g. 10 or 100 or ..
-        log.info("Done")
-
-    def takeStep(self) -> None:
+    def takeStep(self, state, agents) -> None:
         """Run one tick, updates self.state"""
         log.debug("=============================================")
-        log.debug("Tick=%d: begin" % (self.state.tick))
+        log.debug("Tick=%d: begin" % (state.tick))
         
-        if (self.elapsedSeconds() % S_PER_DAY) == 0:
-            str_data, csv_data = self.createLogData()
+        if (self.elapsedSeconds(state) % S_PER_DAY) == 0:
+            str_data, csv_data = self.createLogData(state, agents)
             log.info(str_data)
             self.logToCsv(csv_data)
-                
-        #main work
-        self.state.takeStep()
         
         log.debug("=============================================")
-        log.debug("Tick=%d: done" % self.state.tick)
+        log.debug("Tick=%d: done" % state.tick)
 
-    def createLogData(self):
+    def createLogData(self, state, agents):
         """Compute this iter's status, and output in forms ready
         for console logging and csv logging."""
         F = False
-        state = self.state
         ss = state.ss
         kpis = state.kpis
 
@@ -82,7 +55,7 @@ class SimEngine(object):
         dataheader += ["Tick"]
         datarow += [state.tick]
 
-        es = float(self.elapsedSeconds())
+        es = float(self.elapsedSeconds(state))
         emi, eh, ed, emo, ey = es/S_PER_MIN, es/S_PER_HOUR, es/S_PER_DAY, \
                                es/S_PER_MONTH,es/S_PER_YEAR
         s += [" (%.1f h, %.1f d, %.1f mo)" % \
@@ -166,7 +139,7 @@ class SimEngine(object):
         dataheader += ["rnd_to_sales_ratio", "mkts_annual_growth_rate"]
         datarow += [ratio, growth]
         
-        dao = state.getAgent("ocean_dao") #RouterAgent
+        dao = state.getAgent(agents, "ocean_dao") #RouterAgent
         dao_USD = dao.monthlyUSDreceived(state)
         dao_OCEAN = dao.monthlyOCEANreceived(state)
         dao_OCEAN_in_USD = dao_OCEAN * O_price
@@ -203,12 +176,12 @@ class SimEngine(object):
         with open(full_filename,'a+') as f:
             f.write(", ".join(datarow_s) + "\n")
 
-    def elapsedSeconds(self) -> int:
-        return self.state.tick * self.state.ss.time_step
+    def elapsedSeconds(self, state) -> int:
+        return state.tick * state.ss.time_step
 
-    def doStop(self) -> bool:
-        if self.state.tick >= self.state.ss.max_ticks:
-            log.info("Stop: tick (%d) >= max" % self.state.tick)
+    def doStop(self, state) -> bool:
+        if state.tick >= state.ss.max_ticks:
+            log.info("Stop: tick (%d) >= max" % state.tick)
             return True
         
         return False

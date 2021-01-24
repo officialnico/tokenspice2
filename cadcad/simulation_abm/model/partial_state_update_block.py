@@ -26,7 +26,7 @@ partial_state_update_block = [
         },
         'variables': {
             'agents': s_consume_datasets,
-            'global_state': s_accounting
+            'state': s_accounting
         }
     },
     {

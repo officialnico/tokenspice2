@@ -31,8 +31,8 @@ class MarketplacesAgent(BaseAgent):
     def revenuePerMarketplacePerSecond(self) -> float:
         return self._revenue_per_marketplace_per_s
         
-    def takeStep(self, kpis):
-        ratio = kpis.mktsRNDToSalesRatio()
+    def takeStep(self, state, agents):
+        ratio = state.kpis.mktsRNDToSalesRatio()
         mkts_growth_rate_per_year = state.ss.annualMktsGrowthRate(ratio)
         mkts_growth_rate_per_tick = self._growthRatePerTick(mkts_growth_rate_per_year)
         
@@ -44,7 +44,7 @@ class MarketplacesAgent(BaseAgent):
         #NOTE: we don't bother modeling marketplace profits or tracking mkt wallet $
         sales = self._salesPerTick()
         toll = sales * state.marketplacePercentTollToOcean()
-        toll_agent = state.getAgent(self._toll_agent_name)
+        toll_agent = state.getAgent(agents, self._toll_agent_name)
         toll_agent.receiveUSD(toll)
 
     def _salesPerTick(self) -> float:

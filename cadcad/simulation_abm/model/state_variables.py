@@ -23,6 +23,8 @@ from .parts.agents.DataconsumerAgent import DataconsumerAgent
 
 from .parts.agents.OCEANBurnerAgent import OCEANBurnerAgent
 from .parts.agents.StakerspeculatorAgent import StakerspeculatorAgent
+from .parts.agents.SimAgent import SimAgent
+
 
 from .parts.agents.RouterAgent import RouterAgent
 from .parts.agents.EWPublisherAgent import EWPublisherAgent
@@ -40,21 +42,8 @@ from typing import Tuple, List, Dict
 from itertools import cycle
 from enum import Enum
 
-
-### World size
-N = 200
-M = 20
-INITIAL_CROWD = 1
-
-### Initial agent count
-PERSON_COUNT = 300
-ATTRACTION_COUNT = 10
-PROPOSAL_COUNT = 10
-
-MAX_ATTRACTION_CAPACITY = 5
-MAX_TIMESTEPS = 200
-MAX_DURATION = 5
 MAX_DAYS = 365
+OUTPUT_DIR = 'output'
 
 ## yet to be implemented
 agent_probabilities = [0.7,0.75,0.8,0.85,0.9,0.95]
@@ -72,13 +61,17 @@ initial_agents = AgentDict()
 #Instantiate and connnect agent instances. "Wire up the circuit"
 new_agents: Set[BaseAgent] = set()
 
+new_agents.add(SimAgent(
+    name = "sim_logger", output_dir = OUTPUT_DIR
+))
+
 #FIXME: replace MarketplacesAgent with DataecosystemAgent, when ready
 new_agents.add(MarketplacesAgent(
     name = "marketplaces1", USD=0.0, OCEAN=0.0,
     toll_agent_name = "opc_address",
     n_marketplaces = float(ss.init_n_marketplaces),
     revenue_per_marketplace_per_s = 2e3 / S_PER_MONTH, #magic number
-    time_step = 0,
+    time_step = ss.time_step,
     ))
 
 new_agents.add(DataconsumerAgent(
@@ -161,5 +154,5 @@ for agent in new_agents:
 
 genesis_states = {
     'agents': initial_agents,
-    'global_state': simState,
+    'state': simState,
 }

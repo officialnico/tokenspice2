@@ -5,7 +5,6 @@ from enforce_typing import enforce_types # type: ignore[import]
 import logging
 import os
 import sys
-import time
 
 INFO = logging.INFO
 DEBUG = logging.DEBUG
@@ -22,7 +21,7 @@ if __name__== '__main__':
     
     #set help message
     help = """
-Usage: run_1 MAX_DAYS OUTPUT_DIR [DO_PROFILE]
+Usage: run_cadcad MAX_DAYS OUTPUT_DIR [DO_PROFILE]
 
  MAX_DAYS -- float -- # days to simulate
  OUTPUT_DIR -- string -- output directory for csv file & state db files.
@@ -54,21 +53,13 @@ Usage: run_1 MAX_DAYS OUTPUT_DIR [DO_PROFILE]
         sys.exit(0)
 
     # make directory
-    os.mkdir(output_dir)
+    # os.mkdir(output_dir)
 
-    from engine.SimEngine import SimEngine
-    from engine.SimStrategy import SimStrategy
-    from util import constants
-    print(f'SAFETY = {constants.SAFETY}')
-    print('')
 
     # Experiments
     import run
 
-    start_time = time()
     experiments = run.run()
-    end_time = time()
-    print("Execution in {:.1f}s".format(end_time - start_time))
 
     # Get the ABM results
     agent_ds = experiments.dataset[0].agents
