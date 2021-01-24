@@ -92,7 +92,6 @@ class EWOptimizerAgent(BaseAgent):
 
         #create agent
         pool_agent = PoolAgent(pool_agent_name, pool)
-        print("Create Pool agent...")
         return pool_agent
 
     def _doUnstakeOCEAN(self, agents) -> bool:

@@ -310,7 +310,7 @@ Work done by [Shawn](https://github.com/longtailfinancial/tokenspice2/tree/energ
 
 cadCAD has a functional approach and needs `dict` in order to process Partial State Update blocks, so we need to wrap the `state` and `agent` objects into `dict`s. Good thing is we can merge the agents in cadCADs fine-grained component based policies and mechanics, in the folder `polimechs`
 
-Here's progress on that front. (Last updated 2021-01-18).
+Here's progress on that front. (Last updated 2021-01-24).
 
 **Done so far:**
 - Updated `environment.yml` to include `cadcad`, `plotly` and `hvplot`
@@ -319,10 +319,17 @@ Here's progress on that front. (Last updated 2021-01-18).
 - Merge TokenSPICE code to cadCAD code
   - Used a standard cadCAD structure (`simulation_abm` folder, `config.py` and `sim_params.py`)
   - Re-arranged folder structure to accomodate for relative imports
+  - Split the `simState` from the `agents` for fine-grained control of agent policies
+  - Updated all agent files for the split - usually by calling `takeStep` funtion with 2 parameters `state` and `agents`
+  - Re-arranged the `run_1.py` file to `run_cadcad.py`
+  - Put the runtime simulation args in the `sim_params.py`
+
+Run it from the `cadcad` folder with command `$ ./run_cadcad 1 out` , args do nothing they are hardcoded to `output` directory 
 
 **Still to do:**
 - Finish writing Python-level agent behaviors in cadCADs policies style
-- Wire new agents into system-level design 
+- Debug recursion error happening when creating Pool agents
+- Wire new agents into system-level design
 
 
 

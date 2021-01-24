@@ -9,13 +9,15 @@ def p_publish_datasets(params, substep, state_history, prev_state):
     test = f'p_publish_datasets, {step} - {substep}'
     # print(test)
     agents = prev_state['agents']
+    state = prev_state['state']
     publisher_agents = {k: v for k, v in agents.items() if 'Energy Web Publisher' in v.name}
  
     agent_delta = {}
 
     for label, agent in list(publisher_agents.items()):
-        pool_agent = agent.takeStep(AgentDict(agents), step)
+        pool_agent = agent.takeStep(state, agents)
         if pool_agent is not None:
+            print("Pool Agent created!")
             agent_delta[pool_agent.name] = pool_agent
         agent_delta[label] = agent
 

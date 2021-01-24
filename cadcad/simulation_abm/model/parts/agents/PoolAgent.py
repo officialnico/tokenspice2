@@ -29,7 +29,7 @@ class PoolAgent(BaseAgent):
     def datatoken(self) -> datatoken.Datatoken:
         return self._dt
         
-    def takeStep(self, state):
+    def takeStep(self):
         #it's a smart contract robot, it doesn't initiate anything itself
         pass
         

@@ -24,6 +24,8 @@ from .parts.agents.DataconsumerAgent import DataconsumerAgent
 from .parts.agents.OCEANBurnerAgent import OCEANBurnerAgent
 from .parts.agents.StakerspeculatorAgent import StakerspeculatorAgent
 from .parts.agents.SimAgent import SimAgent
+from .parts.agents.PoolAgent import PoolAgent
+
 
 
 from .parts.agents.RouterAgent import RouterAgent
@@ -82,9 +84,9 @@ new_agents.add(EWPublisherAgent(
     name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=150.0
 ))
 
-new_agents.add(EWOptimizerAgent(
-    name="Energy Web Optimizer " + names.get_first_name(), USD=0.0, OCEAN=150.0
-))
+# new_agents.add(EWOptimizerAgent(
+#     name="Energy Web Optimizer " + names.get_first_name(), USD=0.0, OCEAN=1000.0
+# ))
 
 # new_agents.add(DataecosystemAgent(
 #     name = "dataecosystem1", USD=0.0, OCEAN=0.0
@@ -147,6 +149,7 @@ new_agents.add(GrantTakingAgent(
 
 new_agents.add(GrantTakingAgent(
     name = "bdb_workers", USD=0.0, OCEAN=0.0))
+
 
 for agent in new_agents:
     initial_agents[agent.name] = agent

@@ -9,12 +9,13 @@ def p_optimizing(params, substep, state_history, prev_state):
     step = prev_state['timestep']
     # print(f'p_optimizing, {step} - {substep}')
     agents = prev_state['agents']
+    state = prev_state['state']
     optimizer_agents = {k: v for k, v in agents.items() if 'Energy Web Optimizer' in v.name}
  
     agent_delta = {}
 
     for label, agent in list(optimizer_agents.items()):
-        pool_agent = agent.takeStep(AgentDict(agents), step)
+        pool_agent = agent.takeStep(state, agents)
         if pool_agent is not None:
             agent_delta[pool_agent.name] = pool_agent
         agent_delta[label] = agent

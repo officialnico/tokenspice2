@@ -5,6 +5,7 @@ log = logging.getLogger('marketagents')
 from enforce_typing import enforce_types # type: ignore[import]
 import random
 
+from . import AgentDict
 from .BaseAgent import BaseAgent
 from .PoolAgent import PoolAgent
 from ..util import constants
@@ -22,35 +23,37 @@ class EWPublisherAgent(BaseAgent):
         
         self._s_since_unstake = 0
         self._s_between_unstake = 3 * constants.S_PER_DAY #magic number
+
+        self._pools = {}
         
-    def takeStep(self, agents, step) -> Optional[PoolAgent]:
-        self._s_since_create += step
-        self._s_since_unstake += step
-        pool_agent = None
+    def takeStep(self, state, agents):
+        self._s_since_create += state.ss.time_step
+        self._s_since_unstake += state.ss.time_step
+        pool_agents = self._pools
+        for label, agent in list(pool_agents.items()):
+            agent.takeStep()
 
         if self._doCreatePool():
             self._s_since_create = 0
-            pool_agent = self._createPoolAgent(agents)
+            self._createPoolAgent()
 
         if self._doUnstakeOCEAN(agents):
             self._s_since_unstake = 0
             self._unstakeOCEANsomewhere(agents)
-
-        return pool_agent
 
     def _doCreatePool(self) -> bool:
         if self.OCEAN() < 200.0: #magic number
             return False
         return self._s_since_create >= self._s_between_create
 
-    def _createPoolAgent(self,agents) -> PoolAgent:        
+    def _createPoolAgent(self) -> PoolAgent:        
         assert self.OCEAN() > 0.0, "should not call if no OCEAN"
         wallet = self._wallet._web3wallet
         OCEAN = globaltokens.OCEANtoken()
         
         #name
-        pool_i = len(agents.filterToPool())
-        dt_name = f'DT{pool_i}'
+        pool_i = len(self._pools)
+        dt_name = f'EWDDT{pool_i}'
         # >>> DEC change
         pool_agent_name = f'Energy Web Device Pool {pool_i}'
         
@@ -60,7 +63,6 @@ class EWPublisherAgent(BaseAgent):
         #new pool
         pool_address = bfactory.BFactory().newBPool(from_wallet=wallet)
         pool = bpool.BPool(pool_address)
-        print("Pool create...")
         #bind tokens & add initial liquidity
         OCEAN_bind_amt = 0.5*self.OCEAN() #magic number: use all the OCEAN
         DT_bind_amt = 20.0 #magic number
@@ -77,17 +79,21 @@ class EWPublisherAgent(BaseAgent):
 
         #create agent
         pool_agent = PoolAgent(pool_agent_name, pool)
-        print("Create Pool agent...")
-        return pool_agent
+        print("Pool created...")
+        self._pools[pool_agent_name] = pool_agent
 
     def _doUnstakeOCEAN(self, agents) -> bool:
-        if not agents.filterByNonzeroStake(self):
+        i = 0
+        for pool_agent in list(self._pools.values()):
+            if self.BPT(pool_agent.pool) > 0.0:
+                i += 1
+        if i == 0:
             return False
         return self._s_since_unstake >= self._s_between_unstake
 
     def _unstakeOCEANsomewhere(self, agents):
         """Choose what pool to unstake and by how much. Then do the action."""
-        pool_agents = agents.filterByNonzeroStake(self)
+        pool_agents = self._pools
         pool_agent = random.choice(list(pool_agents.values()))
         BPT = self.BPT(pool_agent.pool)
         BPT_unstake = 0.10 * BPT #magic number
