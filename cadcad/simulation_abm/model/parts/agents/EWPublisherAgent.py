@@ -23,39 +23,37 @@ class EWPublisherAgent(BaseAgent):
         
         self._s_since_unstake = 0
         self._s_between_unstake = 3 * constants.S_PER_DAY #magic number
-
-        self._pools = {}
         
-    def takeStep(self, state, agents):
+    def takeStep(self, state, pool_agents) -> Optional[PoolAgent]:
         self._s_since_create += state.ss.time_step
         self._s_since_unstake += state.ss.time_step
-        pool_agents = self._pools
-        for label, agent in list(pool_agents.items()):
-            agent.takeStep()
+        pool_agent = None
 
         if self._doCreatePool():
             self._s_since_create = 0
-            self._createPoolAgent()
+            pool_agent = self._createPoolAgent(pool_agents)
 
-        if self._doUnstakeOCEAN(agents):
+        if self._doUnstakeOCEAN(pool_agents):
             self._s_since_unstake = 0
-            self._unstakeOCEANsomewhere(agents)
+            self._unstakeOCEANsomewhere(pool_agents)
+        
+        return pool_agent
 
     def _doCreatePool(self) -> bool:
         if self.OCEAN() < 200.0: #magic number
             return False
         return self._s_since_create >= self._s_between_create
 
-    def _createPoolAgent(self) -> PoolAgent:        
+    def _createPoolAgent(self, pool_agents) -> PoolAgent:        
         assert self.OCEAN() > 0.0, "should not call if no OCEAN"
         wallet = self._wallet._web3wallet
         OCEAN = globaltokens.OCEANtoken()
         
         #name
-        pool_i = len(self._pools)
-        dt_name = f'EWDDT{pool_i}'
+        pool_i = len(pool_agents)
+        dt_name = f'DT{pool_i}'
         # >>> DEC change
-        pool_agent_name = f'Energy Web Device Pool {pool_i}'
+        pool_agent_name = f'pool{pool_i}'
         
         #new DT
         DT = self._createDatatoken(dt_name, mint_amt=1000.0) #magic number
@@ -78,26 +76,25 @@ class EWPublisherAgent(BaseAgent):
         pool.finalize(from_wallet=wallet)
 
         #create agent
-        pool_agent = PoolAgent(pool_agent_name, pool)
+        pool_agent = PoolAgent(pool_agent_name, pool_address)
         print("Pool created...")
-        self._pools[pool_agent_name] = pool_agent
+        return pool_agent
 
-    def _doUnstakeOCEAN(self, agents) -> bool:
+    def _doUnstakeOCEAN(self, pool_agents) -> bool:
         i = 0
-        for pool_agent in list(self._pools.values()):
-            if self.BPT(pool_agent.pool) > 0.0:
+        for pool_agent in pool_agents:
+            if self.BPT(bpool.BPool(pool_agent.pool_address)) > 0.0:
                 i += 1
         if i == 0:
             return False
         return self._s_since_unstake >= self._s_between_unstake
 
-    def _unstakeOCEANsomewhere(self, agents):
+    def _unstakeOCEANsomewhere(self, pool_agents):
         """Choose what pool to unstake and by how much. Then do the action."""
-        pool_agents = self._pools
-        pool_agent = random.choice(list(pool_agents.values()))
-        BPT = self.BPT(pool_agent.pool)
+        pool_agent = random.choice(list(pool_agents))
+        BPT = self.BPT(bpool.BPool(pool_agent.pool_address))
         BPT_unstake = 0.10 * BPT #magic number
-        self.unstakeOCEAN(BPT_unstake, pool_agent.pool)
+        self.unstakeOCEAN(BPT_unstake, bpool.BPool(pool_agent.pool_address))
 
     def _createDatatoken(self,dt_name:str,mint_amt:float)-> datatoken.Datatoken:
         """Create datatoken contract and mint DTs to self."""

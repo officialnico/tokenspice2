@@ -10,10 +10,10 @@ INFO = logging.INFO
 DEBUG = logging.DEBUG
 WARNING = logging.WARNING
 
+sys.setrecursionlimit(1500)
+
 # Removing enforce. enforce_typing should be much faster so we don't need the safety toggle.
 # enforce.config({'enabled': False})  # Turn off runtime type-checking, for speed
-
-sys.setrecursionlimit(1500)
 
 if __name__== '__main__':            
     #set up logging

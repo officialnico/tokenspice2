@@ -16,6 +16,7 @@ def p_logistics(params, substep, state_history, prev_state):
 
     agents = prev_state['agents']
     state = prev_state['state']
+    pool_agents = prev_state['pool_agents']
     router_agents = AgentDict(agents).filterByClass(RouterAgent)
     ocean_burner_agents = AgentDict(agents).filterByClass(OCEANBurnerAgent)
     minter_agents = AgentDict(agents).filterByClass(MinterAgents.OCEANFuncMinterAgent)
@@ -43,6 +44,9 @@ def p_logistics(params, substep, state_history, prev_state):
     for label, agent in list(granttaking_agents.items()):
         agent.takeStep(state)
         agent_delta[label] = agent
+
+    for agent in pool_agents:
+        agent.takeStep()
 
     return {'agent_delta': agent_delta }
 

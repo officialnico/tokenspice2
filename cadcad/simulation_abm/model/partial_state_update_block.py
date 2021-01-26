@@ -33,6 +33,7 @@ partial_state_update_block = [
         },
         'variables': {
             'agents': s_publish_datasets,
+            'pool_agents': s_new_pool_agent
         }
     },
     # {

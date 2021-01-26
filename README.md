@@ -323,13 +323,15 @@ Here's progress on that front. (Last updated 2021-01-24).
   - Updated all agent files for the split - usually by calling `takeStep` funtion with 2 parameters `state` and `agents`
   - Re-arranged the `run_1.py` file to `run_cadcad.py`
   - Put the runtime simulation args in the `sim_params.py`
+  - Refactored PoolAgent to flesh bPool class out of constructor, avoiding `RecursionError: maximum recursion depth exceeded`
+  - To be safe did a `sys.setrecursionlimit(1500)` in the `run_cadcad.py`
+  - Put PoolAgents in a separate state variable
 
-Run it from the `cadcad` folder with command `$ ./run_cadcad 1 out` , args do nothing they are hardcoded to `output` directory 
+Run it from the `cadcad` folder with command `$ ./run_cadcad 1 out` , args do nothing they are hardcoded to `output` directory in `state_variables.py`   
 
 **Still to do:**
 - Finish writing Python-level agent behaviors in cadCADs policies style
-- Debug recursion error happening when creating Pool agents
-- Wire new agents into system-level design
+- Wire new RL agents into system-level design
 
 
 

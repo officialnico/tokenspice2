@@ -10,16 +10,16 @@ from ..web3tools.web3util import toBase18
             
 @enforce_types
 class PoolAgent(BaseAgent):    
-    def __init__(self, name: str, pool:bpool.BPool):
+    def __init__(self, name: str, pool_address):
         super().__init__(name, USD=0.0, OCEAN=0.0)
-        self._pool:bpool.BPool = pool
+        self.pool_address = pool_address
         
         self._dt_address = self._datatokenAddress()
-        self._dt = datatoken.Datatoken(self._dt_address)
+        # self._dt = datatoken.Datatoken(self._dt_address)
 
     @property
     def pool(self) -> bpool.BPool:
-        return self._pool
+        return bpool.BPool(self.pool_address)
     
     @property
     def datatoken_address(self) -> str:
@@ -27,14 +27,15 @@ class PoolAgent(BaseAgent):
     
     @property
     def datatoken(self) -> datatoken.Datatoken:
-        return self._dt
+        return datatoken.Datatoken(self._dt_address)
         
     def takeStep(self):
         #it's a smart contract robot, it doesn't initiate anything itself
         pass
         
     def _datatokenAddress(self):
-        addrs = self._pool.getCurrentTokens()
+        pool = bpool.BPool(self.pool_address)
+        addrs = pool.getCurrentTokens()
         assert len(addrs) == 2
         OCEAN_addr = globaltokens.OCEANtoken().address
         for addr in addrs:

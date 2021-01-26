@@ -44,8 +44,8 @@ from typing import Tuple, List, Dict
 from itertools import cycle
 from enum import Enum
 
-MAX_DAYS = 365
-OUTPUT_DIR = 'output'
+MAX_DAYS = 3660
+OUTPUT_DIR = 'output2'
 
 ## yet to be implemented
 agent_probabilities = [0.7,0.75,0.8,0.85,0.9,0.95]
@@ -76,12 +76,12 @@ new_agents.add(MarketplacesAgent(
     time_step = ss.time_step,
     ))
 
-new_agents.add(DataconsumerAgent(
-    name = "Dataconsumer", USD=0.0, OCEAN=0.0
-))
+# new_agents.add(DataconsumerAgent(
+#     name = "Dataconsumer", USD=0.0, OCEAN=0.0
+# ))
 
 new_agents.add(EWPublisherAgent(
-    name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=150.0
+    name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=1000.0
 ))
 
 # new_agents.add(EWOptimizerAgent(
@@ -157,5 +157,6 @@ for agent in new_agents:
 
 genesis_states = {
     'agents': initial_agents,
+    'pool_agents': [],
     'state': simState,
 }
