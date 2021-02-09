@@ -7,6 +7,8 @@ from .parts.polimechs.publishing import *
 from .parts.polimechs.optimizing import *
 from .parts.polimechs.accounting import *
 from .parts.polimechs.logistics import *
+from .parts.polimechs.staking import *
+
 
 partial_state_update_block = [
     {
@@ -16,7 +18,8 @@ partial_state_update_block = [
         },
         'variables': {
             'agents': s_logistics,
-            'state': s_accounting
+            'state': s_accounting,
+            'total_staked': s_staked
         }
     },
     {
@@ -33,7 +36,15 @@ partial_state_update_block = [
         },
         'variables': {
             'agents': s_publish_datasets,
-            'pool_agents': s_new_pool_agent
+            'pool_agents': s_new_pool_agent,
+        }
+    },
+    {
+        'policies': {
+            'publish_datasets': p_staking,
+        },
+        'variables': {
+            'agents': s_staking,
         }
     },
     # {

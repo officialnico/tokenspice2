@@ -5,6 +5,7 @@ from enforce_typing import enforce_types # type: ignore[import]
 import logging
 import os
 import sys
+import pandas as pd
 
 INFO = logging.INFO
 DEBUG = logging.DEBUG
@@ -65,4 +66,14 @@ Usage: run_cadcad MAX_DAYS OUTPUT_DIR [DO_PROFILE]
 
     # Get the ABM results
     agent_ds = experiments.dataset[0].agents
-    timesteps = experiments.dataset[0].timestep
+    state_ds = experiments.dataset[0].state
+    staked_ds = experiments.dataset[0].total_staked
+    
+    for staked in staked_ds:
+        print(staked)
+    
+    # for stats in state_ds:
+    #     # for state in stats.values():
+    #         for k, val in stats.__dict__.items():
+    #             if k == 'kpis':
+    #                 print(val.__dict__)

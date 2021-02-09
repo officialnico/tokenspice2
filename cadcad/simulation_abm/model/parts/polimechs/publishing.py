@@ -34,6 +34,5 @@ def s_publish_datasets(params, substep, state_history, prev_state, policy_input)
     return ('agents', updated_agents)
 
 def s_new_pool_agent(params, substep, state_history, prev_state, policy_input):
-
     return ('pool_agents', policy_input['pool_agent_delta'])
 

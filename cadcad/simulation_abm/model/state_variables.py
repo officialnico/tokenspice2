@@ -29,8 +29,10 @@ from .parts.agents.PoolAgent import PoolAgent
 
 
 from .parts.agents.RouterAgent import RouterAgent
-from .parts.agents.EWPublisherAgent import EWPublisherAgent
-from .parts.agents.EWOptimizerAgent import EWOptimizerAgent
+from .parts.ewagents.EWPublisherAgent import EWPublisherAgent
+from .parts.ewagents.EWStakerAgent import EWStakerAgent
+
+# from .parts.agents.EWOptimizerAgent import EWOptimizerAgent
 
 from .SimStrategy import SimStrategy
 from .SimState import SimState, funcOne
@@ -45,7 +47,7 @@ from itertools import cycle
 from enum import Enum
 
 MAX_DAYS = 3660
-OUTPUT_DIR = 'output2'
+OUTPUT_DIR = 'output_test'
 
 ## yet to be implemented
 agent_probabilities = [0.7,0.75,0.8,0.85,0.9,0.95]
@@ -58,17 +60,19 @@ ss.save_interval = S_PER_DAY
 simState = SimState(ss)
 
 # init agents
-initial_agents = AgentDict()
+# initial_agents = AgentDict()
+initial_agents = {}
+
 
 #Instantiate and connnect agent instances. "Wire up the circuit"
-new_agents: Set[BaseAgent] = set()
+new_agents = list()
 
-new_agents.add(SimAgent(
+new_agents.append(SimAgent(
     name = "sim_logger", output_dir = OUTPUT_DIR
 ))
 
 #FIXME: replace MarketplacesAgent with DataecosystemAgent, when ready
-new_agents.add(MarketplacesAgent(
+new_agents.append(MarketplacesAgent(
     name = "marketplaces1", USD=0.0, OCEAN=0.0,
     toll_agent_name = "opc_address",
     n_marketplaces = float(ss.init_n_marketplaces),
@@ -76,87 +80,126 @@ new_agents.add(MarketplacesAgent(
     time_step = ss.time_step,
     ))
 
-# new_agents.add(DataconsumerAgent(
-#     name = "Dataconsumer", USD=0.0, OCEAN=0.0
-# ))
+new_agents.append(DataconsumerAgent("Dataconsumer", 0.0, 1000.0))
 
-new_agents.add(EWPublisherAgent(
+new_agents.append(EWPublisherAgent(
     name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=1000.0
 ))
 
-# new_agents.add(EWOptimizerAgent(
+new_agents.append(EWStakerAgent(
+    name="Energy Web Staker " + names.get_first_name(), USD=0.0, OCEAN=1000.0
+))
+
+new_agents.append(EWPublisherAgent(
+    name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=2000.0
+))
+
+# new_agents.append(EWStakerAgent(
+#     name="Energy Web Staker " + names.get_first_name(), USD=0.0, OCEAN=2000.0
+# ))
+# new_agents.append(EWOptimizerAgent(
 #     name="Energy Web Optimizer " + names.get_first_name(), USD=0.0, OCEAN=1000.0
 # ))
 
-# new_agents.add(DataecosystemAgent(
+# new_agents.append(DataecosystemAgent(
 #     name = "dataecosystem1", USD=0.0, OCEAN=0.0
 # ))
 
-new_agents.add(RouterAgent(
+new_agents.append(RouterAgent(
     name = "opc_address", USD=0.0, OCEAN=0.0,
     receiving_agents = {"ocean_dao" : simState.percentToOceanDao,
                         "opc_burner" : simState.percentToBurn}))
 
-new_agents.add(OCEANBurnerAgent(
+new_agents.append(OCEANBurnerAgent(
     name = "opc_burner", USD=0.0, OCEAN=0.0))
 
 # #func = MinterAgents.ExpFunc(H=4.0)
 func = MinterAgents.RampedExpFunc(H=4.0,                                 #magic number
                                     T0=0.5, T1=1.0, T2=1.4, T3=3.0,        #""
                                     M1=0.10, M2=0.25, M3=0.50)             #""
-new_agents.add(MinterAgents.OCEANFuncMinterAgent(
+new_agents.append(MinterAgents.OCEANFuncMinterAgent(
     name = "ocean_51",
     receiving_agent_name = "ocean_dao",
     total_OCEAN_to_mint = UNMINTED_OCEAN_SUPPLY,
     s_between_mints = S_PER_DAY,
     func = func))
 
-new_agents.add(GrantGivingAgent(
+new_agents.append(GrantGivingAgent(
     name = "opf_treasury_for_ocean_dao",
     USD = 0.0, OCEAN = OPF_TREASURY_OCEAN_FOR_OCEAN_DAO,                 #magic number
     receiving_agent_name = "ocean_dao",
     s_between_grants = S_PER_MONTH, n_actions = 12 * 3))                 #""
 
-new_agents.add(GrantGivingAgent(
+new_agents.append(GrantGivingAgent(
     name = "opf_treasury_for_opf_mgmt",
     USD = OPF_TREASURY_USD, OCEAN = OPF_TREASURY_OCEAN_FOR_OPF_MGMT,     #magic number
     receiving_agent_name = "opf_mgmt",
     s_between_grants = S_PER_MONTH, n_actions = 12 * 3))                 #""
 
-new_agents.add(GrantGivingAgent(
+new_agents.append(GrantGivingAgent(
     name = "bdb_treasury",
     USD = BDB_TREASURY_USD, OCEAN = BDB_TREASURY_OCEAN,                  #magic number
     receiving_agent_name = "bdb_mgmt",
     s_between_grants = S_PER_MONTH, n_actions = 17))                     #""
 
-new_agents.add(RouterAgent(
+new_agents.append(RouterAgent(
     name = "ocean_dao",
     receiving_agents = {"opc_workers" : funcOne},
     USD=0.0, OCEAN=0.0))
 
-new_agents.add(RouterAgent(
+new_agents.append(RouterAgent(
     name = "opf_mgmt",
     receiving_agents = {"opc_workers" : funcOne},
     USD=0.0, OCEAN=0.0))
                 
-new_agents.add(RouterAgent(
+new_agents.append(RouterAgent(
     name = "bdb_mgmt",
     receiving_agents = {"bdb_workers" : funcOne},
     USD=0.0, OCEAN=0.0))
 
-new_agents.add(GrantTakingAgent(
+new_agents.append(GrantTakingAgent(
     name = "opc_workers", USD=0.0, OCEAN=0.0))
 
-new_agents.add(GrantTakingAgent(
+new_agents.append(GrantTakingAgent(
     name = "bdb_workers", USD=0.0, OCEAN=0.0))
 
 
 for agent in new_agents:
     initial_agents[agent.name] = agent
-    # print(type(agent))
+    print(agent)
+
+from collections import defaultdict
+
+initial_states = {
+    'granttakers_revenue': 0.0,
+    'revenue_per_marketplace': defaultdict(lambda: 0.0), 
+    'total_OCEAN_staked': defaultdict(lambda: 0.0), 
+    'n_marketplaces': 1,
+    'marketplace_percent_toll_to_ocean': 0.0,
+    'total_OCEAN_minted': 0.0,
+    'total_OCEAN_burned': 0.0,
+    'total_OCEAN_minted_USD': 0.0,
+    'total_OCEAN_burned_USD': 0.0,
+}
+
+initial_states2 = {
+    'contributions': [],
+    'pair_totals': defaultdict(lambda: defaultdict(lambda: 0.0)),
+    'quadratic_match': defaultdict(lambda: 0.0), 
+    'quadratic_funding_per_grant': defaultdict(lambda: 0.0),
+    'quadratic_match_per_grant': defaultdict(lambda: 0.0),
+    'quadratic_total_match': 0.0,
+    'quadratic_total_funding': 0.0,
+    'simple_quadratic_match': defaultdict(lambda: 0.0),  
+    'simple_quadratic_funding_per_grant': defaultdict(lambda: 0.0),
+    'simple_quadratic_match_per_grant': defaultdict(lambda: 0.0),
+    'simple_quadratic_total_match': 0.0,
+    'simple_quadratic_total_funding': 0.0,
+}
 
 genesis_states = {
     'agents': initial_agents,
     'pool_agents': [],
     'state': simState,
+    'total_staked': defaultdict(lambda: 0.0), 
 }

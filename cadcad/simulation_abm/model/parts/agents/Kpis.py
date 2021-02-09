@@ -10,8 +10,8 @@ from ..util.constants import *
 class KPIs:
     def __init__(self, time_step: int):
         self._time_step = time_step #seconds per tick
-        
-        #for these, append a new value with each tick
+
+        #for these, append a new value with each tick - need to wipe this out for cadCAD
         self._granttakers_revenue_per_tick__per_tick = []
         
         self._revenue_per_marketplace_per_s__per_tick = []
@@ -23,10 +23,10 @@ class KPIs:
         self._total_OCEAN_minted_USD__per_tick = []
         self._total_OCEAN_burned_USD__per_tick = []
 
-    def takeStep(self, state):        
+    def takeStep(self, state, pool_agents):        
         self._granttakers_revenue_per_tick__per_tick.append(
             state.grantTakersSpentAtTick())
-        
+
         am = state.getAgent("marketplaces1")
         self._revenue_per_marketplace_per_s__per_tick.append(
             am.revenuePerMarketplacePerSecond())
