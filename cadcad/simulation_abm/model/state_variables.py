@@ -83,20 +83,20 @@ new_agents.append(MarketplacesAgent(
 new_agents.append(DataconsumerAgent("Dataconsumer", 0.0, 1000.0))
 
 new_agents.append(EWPublisherAgent(
-    name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=1000.0
+    name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=500.0
 ))
 
 new_agents.append(EWStakerAgent(
-    name="Energy Web Staker " + names.get_first_name(), USD=0.0, OCEAN=1000.0
+    name="Energy Web Staker " + names.get_first_name(), USD=0.0, OCEAN=500.0
 ))
 
 new_agents.append(EWPublisherAgent(
-    name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=2000.0
+    name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=500.0
 ))
 
-# new_agents.append(EWStakerAgent(
-#     name="Energy Web Staker " + names.get_first_name(), USD=0.0, OCEAN=2000.0
-# ))
+new_agents.append(EWStakerAgent(
+    name="Energy Web Staker " + names.get_first_name(), USD=0.0, OCEAN=500.0
+))
 # new_agents.append(EWOptimizerAgent(
 #     name="Energy Web Optimizer " + names.get_first_name(), USD=0.0, OCEAN=1000.0
 # ))
@@ -113,16 +113,16 @@ new_agents.append(RouterAgent(
 new_agents.append(OCEANBurnerAgent(
     name = "opc_burner", USD=0.0, OCEAN=0.0))
 
-# #func = MinterAgents.ExpFunc(H=4.0)
-func = MinterAgents.RampedExpFunc(H=4.0,                                 #magic number
-                                    T0=0.5, T1=1.0, T2=1.4, T3=3.0,        #""
-                                    M1=0.10, M2=0.25, M3=0.50)             #""
-new_agents.append(MinterAgents.OCEANFuncMinterAgent(
-    name = "ocean_51",
-    receiving_agent_name = "ocean_dao",
-    total_OCEAN_to_mint = UNMINTED_OCEAN_SUPPLY,
-    s_between_mints = S_PER_DAY,
-    func = func))
+# # #func = MinterAgents.ExpFunc(H=4.0)
+# func = MinterAgents.RampedExpFunc(H=4.0,                                 #magic number
+#                                     T0=0.5, T1=1.0, T2=1.4, T3=3.0,        #""
+#                                     M1=0.10, M2=0.25, M3=0.50)             #""
+# new_agents.append(MinterAgents.OCEANFuncMinterAgent(
+#     name = "ocean_51",
+#     receiving_agent_name = "ocean_dao",
+#     total_OCEAN_to_mint = UNMINTED_OCEAN_SUPPLY,
+#     s_between_mints = S_PER_DAY,
+#     func = func))
 
 new_agents.append(GrantGivingAgent(
     name = "opf_treasury_for_ocean_dao",

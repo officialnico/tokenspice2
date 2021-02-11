@@ -48,14 +48,14 @@ class EWStakerAgent(EWBaseAgent):
            BPT = self.BPT(bpool.BPool(unstake_pool.pool_address))
         
         # unstake bij 50% chance
-        if unstake_pool and BPT > 0.0 and random.random() < 0.70: #magic number
-            BPT_sell = 0.10 * BPT #magic number
+        if unstake_pool and BPT > 0.0 and random.random() < 0.50: #magic number
+            BPT_sell = 0.10 * random.random() * BPT #magic number
             self.unstakeOCEAN(BPT_sell, bpool.BPool(unstake_pool.pool_address))
             print(f'{self.name} unstake from {pool_to_unstake} : {BPT_sell} BPT')
 
         # stake bij 50% chance
-        if stake_pool and random.random() > 0.70: #magic number
-            OCEAN_stake = 0.10 * self.OCEAN #magic number
+        if stake_pool and random.random() > 0.50: #magic number
+            OCEAN_stake = 0.10 * random.random() * self.OCEAN #magic number
             self.stakeOCEAN(OCEAN_stake, bpool.BPool(stake_pool.pool_address))
             print(f'{self.name} stake on {pool_to_stake} : {OCEAN_stake} OCEAN')
         

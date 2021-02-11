@@ -18,11 +18,11 @@ from dataclasses import dataclass, field
 class EWPublisherAgent(EWBaseAgent):
     # __slots__ = ['_s_since_create', '_s_between_create', '_s_since_unstake', '_s_between_unstake']
     _s_since_create: int = 0
-    _s_between_create: int = 2 * constants.S_PER_DAY #magic number
+    _s_between_create: int = 1 * constants.S_PER_DAY #magic number
     _s_since_unstake: int = 0
-    _s_between_unstake: int = 1 * constants.S_PER_DAY
+    _s_between_unstake: int = 8 * constants.S_PER_HOUR
     _s_since_stake: int = 0
-    _s_between_stake: int = 2 * constants.S_PER_DAY
+    _s_between_stake: int = 6 * constants.S_PER_HOUR
         
     def takeStep(self, state, pool_agents) -> Optional[EWPoolAgent]:
         self._s_since_create += state.ss.time_step
@@ -110,7 +110,7 @@ class EWPublisherAgent(EWBaseAgent):
         while BPT == 0.0:
             pool_agent = random.choice(list(pool_agents))
             BPT = self.BPT(bpool.BPool(pool_agent.pool_address))
-        BPT_reserved = 0.10 * BPT #magic number
+        BPT_reserved = 0.10 * random.random() * BPT #magic number
         return pool_agent, BPT_reserved
 
     def _unstakeOCEANsomewhere(self, pool_agents):
