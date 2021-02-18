@@ -19,11 +19,11 @@ def p_accounting(params, substep, state_history, prev_state):
     pool_agents = prev_state['pool_agents']
     total_staked = {}
     for pool_agent in pool_agents:
-        total_staked[pool_agent.name] = pool_agent.getOceanBalance()
+        total_staked[pool_agent.name] = pool_agent.getBalances()
     # mutant of SimEngine, logging
     sim_agents = AgentDict(agents).filterByClass(SimAgent)
     for label, agent in list(sim_agents.items()):
-        agent.takeStep(state, agents)
+        agent.takeStep(state, agents, total_staked)
 
     marketplaces_agents = AgentDict(agents).filterByClass(MarketplacesAgent)
     for label, agent in list(marketplaces_agents.items()):

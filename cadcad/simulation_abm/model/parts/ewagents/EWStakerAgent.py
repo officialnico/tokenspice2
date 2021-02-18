@@ -40,19 +40,21 @@ class EWStakerAgent(EWBaseAgent):
         pool_to_stake, pool_to_unstake = self._selectPoolToStakeAndUnstake(pools_staked)
         unstake_pool = self._getPoolAgent(pool_agents, pool_to_unstake)
         stake_pool = self._getPoolAgent(pool_agents, pool_to_stake)
-        # print(f'Pool to stake {pool_to_stake}, pool to u stake: {pool_to_unstake}')
         # print(pool_agents)
         # print('Unstake pool: ', unstake_pool)
         BPT = 0.0
         if unstake_pool:
-           BPT = self.BPT(bpool.BPool(unstake_pool.pool_address))
-        
+            BPT = self.BPT(bpool.BPool(unstake_pool.pool_address))
+        print(f'BPT on unstake pool {pool_to_unstake} : {BPT}')
+
         # unstake bij 50% chance
         if unstake_pool and BPT > 0.0 and random.random() < 0.50: #magic number
             BPT_sell = 0.10 * random.random() * BPT #magic number
             self.unstakeOCEAN(BPT_sell, bpool.BPool(unstake_pool.pool_address))
             print(f'{self.name} unstake from {pool_to_unstake} : {BPT_sell} BPT')
 
+        BPT = self.BPT(bpool.BPool(stake_pool.pool_address))
+        print(f'BPT on stake pool {pool_to_stake} : {BPT}')
         # stake bij 50% chance
         if stake_pool and random.random() > 0.50: #magic number
             OCEAN_stake = 0.10 * random.random() * self.OCEAN #magic number
@@ -61,8 +63,8 @@ class EWStakerAgent(EWBaseAgent):
         
 
     def _selectPoolToStakeAndUnstake(self, pools_staked):
-        pools_sorted = sorted(pools_staked.items(), key=itemgetter(1))
-        return pools_sorted[0][0], pools_sorted[-1][0]
+        pools_sorted = sorted(pools_staked.items(), key=lambda x: x[1]['OCEAN'], reverse=True)
+        return pools_sorted[-1][0], pools_sorted[0][0]
     
     def _getPoolAgent(self, pool_agents, name) -> Optional[EWPoolAgent]:
         for pool in pool_agents:

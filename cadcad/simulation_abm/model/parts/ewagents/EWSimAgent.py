@@ -27,7 +27,7 @@ class EWSimAgent(object):
         self.output_dir = output_dir
         self.output_csv = "data.csv" #magic number
 
-    def takeStep(self, state, agents) -> None:
+    def takeStep(self, state, agents, total_staked) -> None:
         """Run one tick, updates self.state"""
         log.debug("=============================================")
         log.debug("Tick=%d: begin" % (state.tick))

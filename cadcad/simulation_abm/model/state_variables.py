@@ -23,7 +23,6 @@ from .parts.agents.DataconsumerAgent import DataconsumerAgent
 
 from .parts.agents.OCEANBurnerAgent import OCEANBurnerAgent
 from .parts.agents.StakerspeculatorAgent import StakerspeculatorAgent
-from .parts.agents.SimAgent import SimAgent
 from .parts.agents.PoolAgent import PoolAgent
 
 
@@ -31,6 +30,7 @@ from .parts.agents.PoolAgent import PoolAgent
 from .parts.agents.RouterAgent import RouterAgent
 from .parts.ewagents.EWPublisherAgent import EWPublisherAgent
 from .parts.ewagents.EWStakerAgent import EWStakerAgent
+from .parts.ewagents.EWSimAgent import EWSimAgent
 
 # from .parts.agents.EWOptimizerAgent import EWOptimizerAgent
 
@@ -67,7 +67,7 @@ initial_agents = {}
 #Instantiate and connnect agent instances. "Wire up the circuit"
 new_agents = list()
 
-new_agents.append(SimAgent(
+new_agents.append(EWSimAgent(
     name = "sim_logger", output_dir = OUTPUT_DIR
 ))
 
@@ -83,7 +83,7 @@ new_agents.append(MarketplacesAgent(
 new_agents.append(DataconsumerAgent("Dataconsumer", 0.0, 1000.0))
 
 new_agents.append(EWPublisherAgent(
-    name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=500.0
+    name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=400.0
 ))
 
 new_agents.append(EWStakerAgent(
@@ -91,7 +91,7 @@ new_agents.append(EWStakerAgent(
 ))
 
 new_agents.append(EWPublisherAgent(
-    name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=500.0
+    name="Energy Web Publisher " + names.get_first_name(), USD=0.0, OCEAN=400.0
 ))
 
 new_agents.append(EWStakerAgent(
@@ -113,16 +113,16 @@ new_agents.append(RouterAgent(
 new_agents.append(OCEANBurnerAgent(
     name = "opc_burner", USD=0.0, OCEAN=0.0))
 
-# # #func = MinterAgents.ExpFunc(H=4.0)
-# func = MinterAgents.RampedExpFunc(H=4.0,                                 #magic number
-#                                     T0=0.5, T1=1.0, T2=1.4, T3=3.0,        #""
-#                                     M1=0.10, M2=0.25, M3=0.50)             #""
-# new_agents.append(MinterAgents.OCEANFuncMinterAgent(
-#     name = "ocean_51",
-#     receiving_agent_name = "ocean_dao",
-#     total_OCEAN_to_mint = UNMINTED_OCEAN_SUPPLY,
-#     s_between_mints = S_PER_DAY,
-#     func = func))
+# #func = MinterAgents.ExpFunc(H=4.0)
+func = MinterAgents.RampedExpFunc(H=4.0,                                 #magic number
+                                    T0=0.5, T1=1.0, T2=1.4, T3=3.0,        #""
+                                    M1=0.10, M2=0.25, M3=0.50)             #""
+new_agents.append(MinterAgents.OCEANFuncMinterAgent(
+    name = "ocean_51",
+    receiving_agent_name = "ocean_dao",
+    total_OCEAN_to_mint = UNMINTED_OCEAN_SUPPLY,
+    s_between_mints = S_PER_DAY,
+    func = func))
 
 new_agents.append(GrantGivingAgent(
     name = "opf_treasury_for_ocean_dao",
@@ -170,32 +170,17 @@ for agent in new_agents:
 
 from collections import defaultdict
 
-initial_states = {
-    'granttakers_revenue': 0.0,
-    'revenue_per_marketplace': defaultdict(lambda: 0.0), 
-    'total_OCEAN_staked': defaultdict(lambda: 0.0), 
-    'n_marketplaces': 1,
-    'marketplace_percent_toll_to_ocean': 0.0,
-    'total_OCEAN_minted': 0.0,
-    'total_OCEAN_burned': 0.0,
-    'total_OCEAN_minted_USD': 0.0,
-    'total_OCEAN_burned_USD': 0.0,
-}
-
-initial_states2 = {
-    'contributions': [],
-    'pair_totals': defaultdict(lambda: defaultdict(lambda: 0.0)),
-    'quadratic_match': defaultdict(lambda: 0.0), 
-    'quadratic_funding_per_grant': defaultdict(lambda: 0.0),
-    'quadratic_match_per_grant': defaultdict(lambda: 0.0),
-    'quadratic_total_match': 0.0,
-    'quadratic_total_funding': 0.0,
-    'simple_quadratic_match': defaultdict(lambda: 0.0),  
-    'simple_quadratic_funding_per_grant': defaultdict(lambda: 0.0),
-    'simple_quadratic_match_per_grant': defaultdict(lambda: 0.0),
-    'simple_quadratic_total_match': 0.0,
-    'simple_quadratic_total_funding': 0.0,
-}
+# initial_states = {
+#     'granttakers_revenue': 0.0,
+#     'revenue_per_marketplace': defaultdict(lambda: 0.0), 
+#     'total_OCEAN_staked': defaultdict(lambda: 0.0), 
+#     'n_marketplaces': 1,
+#     'marketplace_percent_toll_to_ocean': 0.0,
+#     'total_OCEAN_minted': 0.0,
+#     'total_OCEAN_burned': 0.0,
+#     'total_OCEAN_minted_USD': 0.0,
+#     'total_OCEAN_burned_USD': 0.0,
+# }
 
 genesis_states = {
     'agents': initial_agents,
