@@ -94,6 +94,16 @@ conda activate tokenspiceenv
 pytest
 ```
 
+## Linting
+
+Run linting, aka static type-checking by:
+
+```console
+mypy --config-file mypy.ini ./
+```
+
+Note: TokenSPICE also uses the `enforce_types` library for *dynamic* type-checking. 
+
 # Updating Env't
 
 You don't need this info at the beginning, but it's good to know about as you make changes.
@@ -300,13 +310,10 @@ Here's progress on that front. (Last updated 2020-12-10).
   - Started writing Python-level agent behaviors
 
 **Still to do:**
-- Finish writing Python-level agent behaviors for new agents
-- Wire new agents into system-level design 
-- Replicate Ocean V3 market dynamics: run simulations and tune as needed
-- Observe Ocean V4 market dynamics: point at Ocean V4 contracts and run!
-- Iterate on Ocean V4 sim and on design until satisfied
-
-And many future things beyond:)
+- Be able to specify a netlist and run, without having to fork [#30](https://github.com/oceanprotocol/tokenspice2/issues/30)
+- Finish + verify Ocean V3 agents [#28](https://github.com/oceanprotocol/tokenspice2/issues/28)
+- Finish + verify Ocean V4 agents [#29](https://github.com/oceanprotocol/tokenspice2/issues/29)
+- And more. See [issues](https://github.com/oceanprotocol/tokenspice2/issues)
 
 
 # A Final Word, or Two

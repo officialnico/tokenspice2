@@ -1,7 +1,7 @@
 import logging
 log = logging.getLogger('wallet')
 
-from enforce_typing import enforce_types # type: ignore[import]
+from enforce_typing import enforce_types
 import typing
 
 from web3engine import bpool, datatoken, globaltokens
@@ -85,8 +85,8 @@ class AgentWallet:
         return fromBase18(self._OCEAN_base())
 
     def _OCEAN_base(self) -> int:
-        # if self._cached_OCEAN_base is None:
-        self._cached_OCEAN_base = globaltokens.OCEANtoken().balanceOf_base(self._address)
+        if self._cached_OCEAN_base is None:
+            self._cached_OCEAN_base = globaltokens.OCEANtoken().balanceOf_base(self._address)
         return self._cached_OCEAN_base            
         
     def depositOCEAN(self, amt: float) -> None:

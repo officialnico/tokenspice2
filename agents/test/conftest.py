@@ -1,6 +1,7 @@
 
-from enforce_typing import enforce_types # type: ignore[import]
+from enforce_typing import enforce_types
 import pytest
+from typing import Union
 
 from agents import AgentWallet, BaseAgent
 from web3tools import web3util, web3wallet
@@ -29,7 +30,7 @@ def alice_private_key() -> str:
     return _alice_info().private_key
 
 @pytest.fixture
-def alice_agent() -> str:
+def alice_agent():
     class MockAgent(BaseAgent.BaseAgent):
         def takeStep(self, state):
             pass
@@ -60,7 +61,12 @@ def _alice_info():
 @enforce_types
 def _make_info(private_key_name:str):
     class _Info:
-        pass
+        def __init__(self):
+            self.private_key: Union[str, None] = None
+            self.agent_wallet: Union[AgentWallet.AgentWallet, None] = None
+            self.web3wallet: Union[web3wallet, None] = None
+            self.DT: Union[datatoken, None] = None
+            self.pool: Union[bool, None] = None
     info = _Info()
 
     network = web3util.get_network()
