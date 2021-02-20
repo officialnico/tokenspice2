@@ -14,7 +14,7 @@ TokenSPICE was meant to be simple. It definitely makes no claims on "best" for a
 
 # Initial Setup
 
-### -> Set up a virtual environment environment
+### -> Set up and activate a virtual environment environment
 
 
 
