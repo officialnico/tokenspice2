@@ -1,4 +1,5 @@
 # 🐠 TokenSPICE v0.2: Token Simulator with EVM
+Ghetto edition
 
 TokenSPICE can be used to help design, tune, and verify tokenized ecosystems in an overall Token Engineering (TE) flow.
 
@@ -10,9 +11,11 @@ It's currently tuned to model [Ocean Market](https://market.oceanprotocol.com). 
 
 TokenSPICE was meant to be simple. It definitely makes no claims on "best" for anything. Maybe you'll find it useful.
 
+## [Documentation](https://www.notion.so/TokenSPICE2-Docs-b6fc0b91269946eb9f7deaa020d81e9a)
+
 # Initial Setup
 
-### -> Set up a virtual environment environment
+### -> Set up and activate a virtual environment environment
 
 
 
