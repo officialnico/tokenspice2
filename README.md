@@ -1,5 +1,4 @@
 # 🐠 TokenSPICE v0.2: Token Simulator with EVM
-Ghetto edition
 
 TokenSPICE can be used to help design, tune, and verify tokenized ecosystems in an overall Token Engineering (TE) flow.
 
